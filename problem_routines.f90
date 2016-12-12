@@ -2878,12 +2878,12 @@ CONTAINS
         SOLVER_MAPPING=>SOLVER_EQUATIONS%SOLVER_MAPPING
         IF(ASSOCIATED(SOLVER_MAPPING)) THEN
           !Apply boundary conditition
+          PRINT*, "Apply boundary conditition"
           DO equations_set_idx=1,SOLVER_MAPPING%NUMBER_OF_EQUATIONS_SETS
             EQUATIONS_SET=>SOLVER_MAPPING%EQUATIONS_SETS(equations_set_idx)%PTR
             !Assemble the equations set
             CALL EQUATIONS_SET_ASSEMBLE(EQUATIONS_SET,ERR,ERROR,*999)
           ENDDO !equations_set_idx
-
           PRINT*, "Interface conditions: ", SOLVER_MAPPING%NUMBER_OF_INTERFACE_CONDITIONS
 
           !Make sure the interface matrices are up to date

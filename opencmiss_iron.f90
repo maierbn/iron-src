@@ -333,6 +333,8 @@ MODULE OpenCMISS_Iron
 
   PUBLIC cmfe_CustomTimingGet, cmfe_CustomTimingReset
 
+  PUBLIC cmfe_CustomSolverInfoGet, cmfe_CustomSolverInfoReset
+
   !PUBLIC cmfe_Finalise,cmfe_Initialise
   PUBLIC cmfe_Finalise,cmfe_Initialise
 
@@ -7215,6 +7217,69 @@ CONTAINS
     RETURN
 
   END SUBROUTINE cmfe_CustomTimingReset
+  !
+  !================================================================================================================================
+  !
+
+  !
+  !================================================================================================================================
+  !
+
+  SUBROUTINE cmfe_CustomSolverInfoGet( &
+    & CustomSolverConvergenceReasonParabolic, &
+    & CustomSolverConvergenceReasonNewton, &
+    & CustomSolverNumberIterationsParabolic, &
+    & CustomSolverNumberIterationsParabolicMin, &
+    & CustomSolverNumberIterationsParabolicMax, &
+    & CustomSolverNumberIterationsNewton, &
+    & CustomSolverNumberIterationsNewtonMin, &
+    & CustomSolverNumberIterationsNewtonMax, Err)
+
+    INTEGER(INTG), INTENT(OUT) :: CustomSolverConvergenceReasonParabolic
+    INTEGER(INTG), INTENT(OUT) :: CustomSolverConvergenceReasonNewton
+    INTEGER(INTG), INTENT(OUT) :: CustomSolverNumberIterationsParabolic
+    INTEGER(INTG), INTENT(OUT) :: CustomSolverNumberIterationsParabolicMin
+    INTEGER(INTG), INTENT(OUT) :: CustomSolverNumberIterationsParabolicMax
+    INTEGER(INTG), INTENT(OUT) :: CustomSolverNumberIterationsNewton
+    INTEGER(INTG), INTENT(OUT) :: CustomSolverNumberIterationsNewtonMin
+    INTEGER(INTG), INTENT(OUT) :: CustomSolverNumberIterationsNewtonMax
+    INTEGER(INTG), INTENT(OUT) :: Err !<The error code.
+
+    CustomSolverConvergenceReasonParabolic = SOLVER_CONVERGENCE_REASON_PARABOLIC
+    CustomSolverConvergenceReasonNewton =    SOLVER_CONVERGENCE_REASON_NEWTON
+    CustomSolverNumberIterationsParabolic =  SOLVER_NUMBER_ITERATIONS_PARABOLIC
+    CustomSolverNumberIterationsParabolicMin = SOLVER_NUMBER_ITERATIONS_PARABOLIC_MIN
+    CustomSolverNumberIterationsParabolicMax = SOLVER_NUMBER_ITERATIONS_PARABOLIC_MAX
+    CustomSolverNumberIterationsNewton =     SOLVER_NUMBER_ITERATIONS_NEWTON
+    CustomSolverNumberIterationsNewtonMin =  SOLVER_NUMBER_ITERATIONS_NEWTON_MIN
+    CustomSolverNumberIterationsNewtonMax =  SOLVER_NUMBER_ITERATIONS_NEWTON_MAX
+
+    RETURN
+999 CALL cmfe_HandleError(err,error)
+    RETURN
+
+  END SUBROUTINE cmfe_CustomSolverInfoGet
+  !
+  !================================================================================================================================
+  !
+
+  SUBROUTINE cmfe_CustomSolverInfoReset(Err)
+    INTEGER(INTG), INTENT(OUT) :: err !<The error code.
+
+    SOLVER_CONVERGENCE_REASON_PARABOLIC = 0
+    SOLVER_CONVERGENCE_REASON_NEWTON = 0
+    SOLVER_NUMBER_ITERATIONS_PARABOLIC = 0
+    SOLVER_NUMBER_ITERATIONS_PARABOLIC_MIN = HUGE(SOLVER_NUMBER_ITERATIONS_PARABOLIC_MIN)
+    SOLVER_NUMBER_ITERATIONS_PARABOLIC_MAX = 0
+    SOLVER_NUMBER_ITERATIONS_NEWTON = 0
+    SOLVER_NUMBER_ITERATIONS_NEWTON_MIN = HUGE(SOLVER_NUMBER_ITERATIONS_NEWTON_MIN)
+    SOLVER_NUMBER_ITERATIONS_NEWTON_MAX = 0
+
+    RETURN
+999 CALL cmfe_HandleError(err,error)
+    RETURN
+
+  END SUBROUTINE cmfe_CustomSolverInfoReset
   !
   !================================================================================================================================
   !
