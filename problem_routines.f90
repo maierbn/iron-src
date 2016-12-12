@@ -2850,7 +2850,7 @@ CONTAINS
   !================================================================================================================================
   !
 
-  !>Solves static nonlinear solver equations.
+  !>Solvesl static nonlinear solver equations.
   SUBROUTINE Problem_SolverEquationsStaticNonlinearSolve(SOLVER_EQUATIONS,ERR,ERROR,*)
 
    !Argument variables
@@ -2884,7 +2884,7 @@ CONTAINS
             CALL EQUATIONS_SET_ASSEMBLE(EQUATIONS_SET,ERR,ERROR,*999)
           ENDDO !equations_set_idx
 
-          PRINT*, "Interface conditions: ", SOLVER_MAPPING%NUMBER_OF_INTERFACE_CONDITIONS
+          !PRINT*, "Interface conditions: ", SOLVER_MAPPING%NUMBER_OF_INTERFACE_CONDITIONS
 
           !Make sure the interface matrices are up to date
           DO interface_condition_idx=1,SOLVER_MAPPING%NUMBER_OF_INTERFACE_CONDITIONS

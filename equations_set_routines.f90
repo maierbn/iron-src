@@ -1555,7 +1555,7 @@ CONTAINS
 
             DO I = 0, NumberOfComputationalNodes
 
-              IF (ComputationalNodeNumber == I) THEN
+              IF (ComputationalNodeNumber == I .AND. .FALSE.) THEN
 
                 PRINT*, "Process ",I
                 PRINT*, "Loop in equations_set_routines.f90, line 1561"
@@ -1585,7 +1585,7 @@ CONTAINS
               ne = ELEMENTS_MAPPING%DOMAIN_LIST(element_idx)
               NUMBER_OF_TIMES = NUMBER_OF_TIMES+1
               CALL EQUATIONS_MATRICES_ELEMENT_CALCULATE(EQUATIONS_MATRICES,ne,ERR,ERROR,*999)
-              PRINT*, "EquationsSet_FiniteElementResidualEvaluate(1588)"
+              !PRINT*, "EquationsSet_FiniteElementResidualEvaluate(1588)"
               CALL EquationsSet_FiniteElementResidualEvaluate(EQUATIONS_SET,ne,ERR,ERROR,*999)
               CALL EQUATIONS_MATRICES_ELEMENT_ADD(EQUATIONS_MATRICES,ERR,ERROR,*999)
             ENDDO !element_idx

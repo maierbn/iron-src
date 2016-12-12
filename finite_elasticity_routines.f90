@@ -2176,7 +2176,7 @@ CONTAINS
 
             !Calculate Cauchy stress tensor at the gauss point
 
-            PRINT*, "CALL FINITE_ELASTICITY_GAUSS_CAUCHY_TENSOR(2179)"
+            !PRINT*, "CALL FINITE_ELASTICITY_GAUSS_CAUCHY_TENSOR(2179)"
             CALL FINITE_ELASTICITY_GAUSS_CAUCHY_TENSOR(EQUATIONS_SET,DEPENDENT_INTERPOLATED_POINT, &
               & MATERIALS_INTERPOLATED_POINT,DARCY_DEPENDENT_INTERPOLATED_POINT, &
               & INDEPENDENT_INTERPOLATED_POINT,cauchyTensor,Jznu,DZDNU,ELEMENT_NUMBER,gauss_idx,ERR,ERROR,*999)
@@ -4171,8 +4171,8 @@ CONTAINS
 
       !if (dof_idx < 2000) then
 
-        CALL MPI_Comm_rank(MPI_COMM_WORLD, ComputationalNodeNumber,Err)
-        PRINT*, ComputationalNodeNumber, ", El. no. ", ELEMENT_NUMBER, ", GP no. ", GAUSS_POINT_NUMBER, ", lambda_a=", lambda_a
+        !CALL MPI_Comm_rank(MPI_COMM_WORLD, ComputationalNodeNumber,Err)
+        !PRINT*, ComputationalNodeNumber, ", El. no. ", ELEMENT_NUMBER, ", GP no. ", GAUSS_POINT_NUMBER, ", lambda_a=", lambda_a
 
       !endif
 
