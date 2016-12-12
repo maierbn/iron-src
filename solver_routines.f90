@@ -76,6 +76,60 @@ MODULE SOLVER_ROUTINES
 
   PRIVATE
 
+  ! Solver output reasons
+  REAL(INTG), PUBLIC :: SOLVER_CONVERGENCE_REASON_PARABOLIC = 0
+  REAL(INTG), PUBLIC :: SOLVER_CONVERGENCE_REASON_NEWTON = 0
+  REAL(INTG), PUBLIC :: SOLVER_NUMBER_ITERATIONS_PARABOLIC = 0
+  REAL(INTG), PUBLIC :: SOLVER_NUMBER_ITERATIONS_PARABOLIC_MIN = HUGE(SOLVER_NUMBER_ITERATIONS_PARABOLIC_MIN)
+  REAL(INTG), PUBLIC :: SOLVER_NUMBER_ITERATIONS_PARABOLIC_MAX = 0
+  REAL(INTG), PUBLIC :: SOLVER_NUMBER_ITERATIONS_NEWTON = 0
+  REAL(INTG), PUBLIC :: SOLVER_NUMBER_ITERATIONS_NEWTON_MIN = HUGE(SOLVER_NUMBER_ITERATIONS_NEWTON_MIN)
+  REAL(INTG), PUBLIC :: SOLVER_NUMBER_ITERATIONS_NEWTON_MAX = 0
+
+
+  ! parabolic solver
+  !CALL Petsc_KSPGetConvergedReason(LINEAR_ITERATIVE_SOLVER%KSP,CONVERGED_REASON,ERR,ERROR,*999)
+  !/* converged */
+  !KSP_CONVERGED_RTOL_NORMAL        =  1,
+  !KSP_CONVERGED_ATOL_NORMAL        =  9,
+  !KSP_CONVERGED_RTOL               =  2,
+  !KSP_CONVERGED_ATOL               =  3,
+  !KSP_CONVERGED_ITS                =  4,
+  !KSP_CONVERGED_CG_NEG_CURVE       =  5,
+  !KSP_CONVERGED_CG_CONSTRAINED     =  6,
+  !KSP_CONVERGED_STEP_LENGTH        =  7,
+  !KSP_CONVERGED_HAPPY_BREAKDOWN    =  8,
+  !/* diverged */
+  !KSP_DIVERGED_NULL                = -2,
+  !KSP_DIVERGED_ITS                 = -3,
+  !KSP_DIVERGED_DTOL                = -4,
+  !KSP_DIVERGED_BREAKDOWN           = -5,
+  !KSP_DIVERGED_BREAKDOWN_BICG      = -6,
+  !KSP_DIVERGED_NONSYMMETRIC        = -7,
+  !KSP_DIVERGED_INDEFINITE_PC       = -8,
+  !KSP_DIVERGED_NANORINF            = -9,
+  !KSP_DIVERGED_INDEFINITE_MAT      = -10,
+  !KSP_DIVERGED_PCSETUP_FAILED      = -11,
+
+  ! newton solver
+  !CALL Petsc_SnesGetConvergedReason(LINESEARCH_SOLVER%snes,CONVERGED_REASON,ERR,ERROR,*999)
+  !/* converged */
+  !SNES_CONVERGED_FNORM_ABS         =  2, /* ||F|| < atol */
+  !SNES_CONVERGED_FNORM_RELATIVE    =  3, /* ||F|| < rtol*||F_initial|| */
+  !SNES_CONVERGED_SNORM_RELATIVE    =  4, /* Newton computed step size small; || delta x || < stol || x ||*/
+  !SNES_CONVERGED_ITS               =  5, /* maximum iterations reached */
+  !SNES_CONVERGED_TR_DELTA          =  7,
+  !/* diverged */
+  !SNES_DIVERGED_FUNCTION_DOMAIN     = -1, /* the new x location passed the function is not in the domain of F */
+  !SNES_DIVERGED_FUNCTION_COUNT      = -2,
+  !SNES_DIVERGED_LINEAR_SOLVE        = -3, /* the linear solve failed */
+  !SNES_DIVERGED_FNORM_NAN           = -4,
+  !SNES_DIVERGED_MAX_IT              = -5,
+  !SNES_DIVERGED_LINE_SEARCH         = -6, /* the line search failed */
+  !SNES_DIVERGED_INNER               = -7, /* inner solve failed */
+
+
+
 #include "petscversion.h"
 
   !Module parameters
@@ -11547,6 +11601,38 @@ CONTAINS
 #endif
                               !Check for convergence
                               CALL Petsc_KSPGetConvergedReason(LINEAR_ITERATIVE_SOLVER%KSP,CONVERGED_REASON,ERR,ERROR,*999)
+
+                              !/* converged */
+                              !KSP_CONVERGED_RTOL_NORMAL        =  1,
+                              !KSP_CONVERGED_ATOL_NORMAL        =  9,
+                              !KSP_CONVERGED_RTOL               =  2,
+                              !KSP_CONVERGED_ATOL               =  3,
+                              !KSP_CONVERGED_ITS                =  4,
+                              !KSP_CONVERGED_CG_NEG_CURVE       =  5,
+                              !KSP_CONVERGED_CG_CONSTRAINED     =  6,
+                              !KSP_CONVERGED_STEP_LENGTH        =  7,
+                              !KSP_CONVERGED_HAPPY_BREAKDOWN    =  8,
+                              !/* diverged */
+                              !KSP_DIVERGED_NULL                = -2,
+                              !KSP_DIVERGED_ITS                 = -3,
+                              !KSP_DIVERGED_DTOL                = -4,
+                              !KSP_DIVERGED_BREAKDOWN           = -5,
+                              !KSP_DIVERGED_BREAKDOWN_BICG      = -6,
+                              !KSP_DIVERGED_NONSYMMETRIC        = -7,
+                              !KSP_DIVERGED_INDEFINITE_PC       = -8,
+                              !KSP_DIVERGED_NANORINF            = -9,
+                              !KSP_DIVERGED_INDEFINITE_MAT      = -10,
+                              !KSP_DIVERGED_PCSETUP_FAILED      = -11,
+                              SOLVER_CONVERGENCE_REASON_PARABOLIC = CONVERGED_REASON
+
+                              CALL Petsc_KSPGetIterationNumber(LINEAR_ITERATIVE_SOLVER%KSP,NUMBER_ITERATIONS,ERR,ERROR,*999)
+                              SOLVER_NUMBER_ITERATIONS_PARABOLIC = NUMBER_ITERATIONS
+
+                              SOLVER_NUMBER_ITERATIONS_PARABOLIC_MIN = &
+                                & MIN(SOLVER_NUMBER_ITERATIONS_PARABOLIC_MIN, SOLVER_NUMBER_ITERATIONS_PARABOLIC)
+                              SOLVER_NUMBER_ITERATIONS_PARABOLIC_MAX = &
+                                & MAX(SOLVER_NUMBER_ITERATIONS_PARABOLIC_MAX, SOLVER_NUMBER_ITERATIONS_PARABOLIC)
+
                               SELECT CASE(CONVERGED_REASON)
                               CASE(PETSC_KSP_DIVERGED_NULL)
                                 CALL FLAG_WARNING("Linear iterative solver did not converge. PETSc diverged null.",ERR,ERROR,*999)
@@ -18928,6 +19014,32 @@ CONTAINS
                           & ERR,ERROR,*999)
                         !Check for convergence
                         CALL Petsc_SnesGetConvergedReason(LINESEARCH_SOLVER%snes,CONVERGED_REASON,ERR,ERROR,*999)
+
+                        !/* converged */
+                        !SNES_CONVERGED_FNORM_ABS         =  2, /* ||F|| < atol */
+                        !SNES_CONVERGED_FNORM_RELATIVE    =  3, /* ||F|| < rtol*||F_initial|| */
+                        !SNES_CONVERGED_SNORM_RELATIVE    =  4, /* Newton computed step size small; || delta x || < stol || x ||*/
+                        !SNES_CONVERGED_ITS               =  5, /* maximum iterations reached */
+                        !SNES_CONVERGED_TR_DELTA          =  7,
+                        !/* diverged */
+                        !SNES_DIVERGED_FUNCTION_DOMAIN     = -1, /* the new x location passed the function is not in the domain of F */
+                        !SNES_DIVERGED_FUNCTION_COUNT      = -2,
+                        !SNES_DIVERGED_LINEAR_SOLVE        = -3, /* the linear solve failed */
+                        !SNES_DIVERGED_FNORM_NAN           = -4,
+                        !SNES_DIVERGED_MAX_IT              = -5,
+                        !SNES_DIVERGED_LINE_SEARCH         = -6, /* the line search failed */
+                        !SNES_DIVERGED_INNER               = -7, /* inner solve failed */
+
+                        SOLVER_CONVERGENCE_REASON_NEWTON = CONVERGED_REASON
+
+                        CALL Petsc_SnesGetIterationNumber(LINESEARCH_SOLVER%snes,NUMBER_ITERATIONS,ERR,ERROR,*999)
+                        SOLVER_NUMBER_ITERATIONS_NEWTON = NUMBER_ITERATIONS
+                        SOLVER_NUMBER_ITERATIONS_NEWTON_MIN = &
+                          & MIN(SOLVER_NUMBER_ITERATIONS_NEWTON_MIN, SOLVER_NUMBER_ITERATIONS_NEWTON)
+                        SOLVER_NUMBER_ITERATIONS_NEWTON_MAX = &
+                          & MAX(SOLVER_NUMBER_ITERATIONS_NEWTON_MAX, SOLVER_NUMBER_ITERATIONS_NEWTON)
+
+
                         SELECT CASE(CONVERGED_REASON)
                         CASE(PETSC_SNES_DIVERGED_FUNCTION_DOMAIN)
                           CALL FlagError("Nonlinear line search solver did not converge. PETSc diverged function domain.", &

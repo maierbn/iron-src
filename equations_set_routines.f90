@@ -1174,7 +1174,7 @@ CONTAINS
               CALL CPU_TIMER(USER_CPU,USER_TIME1,ERR,ERROR,*999)
               CALL CPU_TIMER(SYSTEM_CPU,SYSTEM_TIME1,ERR,ERROR,*999)
             ENDIF
-            !Initialise the matrices and rhs vector
+            !Initialise the matrices and rhs vector to 0.0_DP
             CALL EQUATIONS_MATRICES_VALUES_INITIALISE(EQUATIONS_MATRICES,EQUATIONS_MATRICES_LINEAR_ONLY,0.0_DP,ERR,ERROR,*999)
             !Assemble the elements
             !Allocate the element matrices

@@ -2878,6 +2878,7 @@ CONTAINS
         SOLVER_MAPPING=>SOLVER_EQUATIONS%SOLVER_MAPPING
         IF(ASSOCIATED(SOLVER_MAPPING)) THEN
           !Apply boundary conditition
+          !PRINT*, "Apply boundary conditition"
           DO equations_set_idx=1,SOLVER_MAPPING%NUMBER_OF_EQUATIONS_SETS
             EQUATIONS_SET=>SOLVER_MAPPING%EQUATIONS_SETS(equations_set_idx)%PTR
             !Assemble the equations set
