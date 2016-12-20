@@ -10765,7 +10765,7 @@ CONTAINS
               CALL Petsc_KSPSetType(LINEAR_ITERATIVE_SOLVER%KSP,PETSC_KSPCG,ERR,ERROR,*999)
             CASE(SOLVER_ITERATIVE_BICONJUGATE_GRADIENT)
               CALL Petsc_KSPSetType(LINEAR_ITERATIVE_SOLVER%KSP,PETSC_KSPBICG,ERR,ERROR,*999)
-            CASE(SOLVER_ITERATIVE_GMRES)
+            CASE(SOLVER_ITERATIVE_GMRES) ! this one is used
               CALL Petsc_KSPSetType(LINEAR_ITERATIVE_SOLVER%KSP,PETSC_KSPGMRES,ERR,ERROR,*999)
               CALL Petsc_KSPGMRESSetRestart(LINEAR_ITERATIVE_SOLVER%KSP,LINEAR_ITERATIVE_SOLVER%GMRES_RESTART,ERR,ERROR,*999)
             CASE(SOLVER_ITERATIVE_BiCGSTAB)
@@ -18751,6 +18751,9 @@ CONTAINS
                     CALL Petsc_SnesLineSearchSetTolerances(linesearch_solver%snesLineSearch, &
                       & LINESEARCH_SOLVER%LINESEARCH_STEPTOLERANCE,LINESEARCH_SOLVER%LINESEARCH_MAXSTEP, &
                       & PETSC_DEFAULT_REAL,PETSC_DEFAULT_REAL,PETSC_DEFAULT_REAL,PETSC_DEFAULT_INTEGER,err,error,*999)
+                    !PRINT*, "PETSc SNES linesearch "
+                    !PRINT*, "step tolerance: ", LINESEARCH_SOLVER%LINESEARCH_STEPTOLERANCE
+                    !PRINT*, "max step: ", LINESEARCH_SOLVER%LINESEARCH_MAXSTEP
                     IF(linesearch_solver%linesearchMonitorOutput) THEN
                       CALL Petsc_SnesLineSearchSetMonitor(linesearch_solver%snesLineSearch,PETSC_TRUE,err,error,*999)
                     ELSE
@@ -18761,6 +18764,12 @@ CONTAINS
                       & NEWTON_SOLVER%RELATIVE_TOLERANCE,NEWTON_SOLVER%SOLUTION_TOLERANCE, &
                       & NEWTON_SOLVER%MAXIMUM_NUMBER_OF_ITERATIONS, &
                       & NEWTON_SOLVER%MAXIMUM_NUMBER_OF_FUNCTION_EVALUATIONS,ERR,ERROR,*999)
+                    !PRINT*, "PETSc SNES "
+                    !PRINT*, "absolute tolerance: ", NEWTON_SOLVER%ABSOLUTE_TOLERANCE
+                    !PRINT*, "relative tolerance: ", NEWTON_SOLVER%RELATIVE_TOLERANCE
+                    !PRINT*, "solution tolerance: ", NEWTON_SOLVER%SOLUTION_TOLERANCE
+                    !PRINT*, "max. number of iterations: ", NEWTON_SOLVER%MAXIMUM_NUMBER_OF_ITERATIONS
+                    !PRINT*, "max. number of function evaluations: ", NEWTON_SOLVER%MAXIMUM_NUMBER_OF_FUNCTION_EVALUATIONS
                     !Set any further SNES options from the command line options
                     CALL Petsc_SnesSetFromOptions(LINESEARCH_SOLVER%snes,ERR,ERROR,*999)
                   ELSE
@@ -19039,6 +19048,7 @@ CONTAINS
                         SOLVER_NUMBER_ITERATIONS_NEWTON_MAX = &
                           & MAX(SOLVER_NUMBER_ITERATIONS_NEWTON_MAX, SOLVER_NUMBER_ITERATIONS_NEWTON)
 
+                        PRINT*, "linesearch solver n iterations: ",NUMBER_ITERATIONS
 
                         SELECT CASE(CONVERGED_REASON)
                         CASE(PETSC_SNES_DIVERGED_FUNCTION_DOMAIN)
