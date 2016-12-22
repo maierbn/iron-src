@@ -103,6 +103,8 @@ MODULE OpenCMISS_Iron
   USE STRINGS
   USE TYPES
 
+  USE CUSTOM_PROFILING
+
 #include "macros.h"
 #include "dllexport.h"
 
@@ -14157,7 +14159,7 @@ CONTAINS
     END IF
 
 #ifdef TAUPROF
-    CALL TAU_STATIC_PHASE_START('CellML Create')
+    !CALL TAU_STATIC_PHASE_START('CellML Create')
 #endif
 
     EXITS("cmfe_CellML_CreateFinishNumber")
@@ -14186,7 +14188,7 @@ CONTAINS
     CALL CELLML_CREATE_FINISH(CellML%CELLML,err,error,*999)
 
 #ifdef TAUPROF
-    CALL TAU_STATIC_PHASE_START('CellML Create')
+    !CALL TAU_STATIC_PHASE_START('CellML Create')
 #endif
 
     EXITS("cmfe_CellML_CreateFinishObj")
@@ -14217,7 +14219,7 @@ CONTAINS
     ENTERS("cmfe_CellML_CreateStartNumber",err,error,*999)
 
 #ifdef TAUPROF
-    CALL TAU_STATIC_PHASE_START('CellML Create')
+    !CALL TAU_STATIC_PHASE_START('CellML Create')
 #endif
 
     NULLIFY(REGION)
@@ -14257,7 +14259,7 @@ CONTAINS
     ENTERS("cmfe_CellML_CreateStartObj",err,error,*999)
 
 #ifdef TAUPROF
-    CALL TAU_STATIC_PHASE_START('CellML Create')
+    !CALL TAU_STATIC_PHASE_START('CellML Create')
 #endif
 
     CALL CELLML_CREATE_START(CellMLUserNumber,region%region,CellML%CELLML,err,error,*999)
@@ -14378,7 +14380,7 @@ CONTAINS
     END IF
 
 #ifdef TAUPROF
-    CALL TAU_STATIC_PHASE_START('CellML Create')
+    !CALL TAU_STATIC_PHASE_START('CellML Create')
 #endif
 
     EXITS("cmfe_CellML_FieldMapsCreateFinishNumber")
@@ -48233,7 +48235,11 @@ CONTAINS
     CALL TAU_STATIC_PHASE_START('problem Solve')
 #endif
 
+    CALL CustomProfilingStart('problem solve')
+
     CALL PROBLEM_SOLVE(problem%problem,err,error,*999)
+
+    CALL CustomProfilingStop('problem solve')
 
 #ifdef TAUPROF
     CALL TAU_STATIC_PHASE_STOP('problem Solve')
