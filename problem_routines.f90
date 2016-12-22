@@ -332,6 +332,8 @@ CONTAINS
 
     ENTERS("PROBLEM_CELLML_EQUATIONS_SOLVE",ERR,ERROR,*999)
 
+    CALL CustomProfilingStart('cellml eqn solve')
+
     IF(ASSOCIATED(CELLML_EQUATIONS)) THEN
       IF(CELLML_EQUATIONS%CELLML_EQUATIONS_FINISHED) THEN
         SOLVER=>CELLML_EQUATIONS%SOLVER
@@ -351,6 +353,8 @@ CONTAINS
     ELSE
       CALL FlagError("CellML equations is not associated.",ERR,ERROR,*999)
     ENDIF
+
+    CALL CustomProfilingEnd('cellml eqn solve')
 
     EXITS("PROBLEM_CELLML_EQUATIONS_SOLVE")
     RETURN

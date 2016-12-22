@@ -2542,9 +2542,19 @@ CONTAINS
 !!TODO: Maybe move this getting of fields earlier up the DAE solver chain? For now keep here.
 
                       !Make sure CellML fields have been updated to the current value of any mapped fields
+
+                      CALL CustomProfilingStart('cellml field2cellml update')
+
                       CALL CELLML_FIELD_TO_CELLML_UPDATE(CELLML_ENVIRONMENT,ERR,ERROR,*999)
 
+                      CALL CustomProfilingStop('cellml field2cellml update')
+                      CALL CustomProfilingStart('cellml field var get')
+
                       CALL FIELD_VARIABLE_GET(MODELS_FIELD,FIELD_U_VARIABLE_TYPE,MODELS_VARIABLE,ERR,ERROR,*999)
+
+                      CALL CustomProfilingStop('cellml field var get')
+                      CALL CustomProfilingStart('cellml data get')
+
                       CALL FIELD_PARAMETER_SET_DATA_GET(MODELS_FIELD,FIELD_U_VARIABLE_TYPE,FIELD_VALUES_SET_TYPE, &
                         & MODELS_DATA,ERR,ERROR,*999)
 
@@ -2575,12 +2585,18 @@ CONTAINS
                         ENDIF
                       ENDIF
 
+                      CALL CustomProfilingStop('cellml data get')
+                      CALL CustomProfilingStart('cellml integrate')
+
                       !Integrate these CellML equations
                       CALL SOLVER_DAE_EULER_FORWARD_INTEGRATE(FORWARD_EULER_SOLVER,CELLML_ENVIRONMENT,MODELS_VARIABLE% &
                         & TOTAL_NUMBER_OF_DOFS,DAE_SOLVER%START_TIME,DAE_SOLVER%END_TIME,DAE_SOLVER%INITIAL_STEP, &
                         & CELLML_ENVIRONMENT%MODELS_FIELD%ONLY_ONE_MODEL_INDEX,MODELS_DATA,CELLML_ENVIRONMENT% &
                         & MAXIMUM_NUMBER_OF_STATE,STATE_DATA,CELLML_ENVIRONMENT%MAXIMUM_NUMBER_OF_PARAMETERS, &
                         & PARAMETERS_DATA,CELLML_ENVIRONMENT%MAXIMUM_NUMBER_OF_INTERMEDIATE,INTERMEDIATE_DATA,ERR,ERROR,*999)
+
+                      CALL CustomProfilingStop('cellml integrate')
+                      CALL CustomProfilingStart('cellml data restore')
 
                       !Restore field data
                       CALL FIELD_PARAMETER_SET_DATA_RESTORE(MODELS_FIELD,FIELD_U_VARIABLE_TYPE,FIELD_VALUES_SET_TYPE, &
@@ -2592,8 +2608,13 @@ CONTAINS
                       IF(ASSOCIATED(INTERMEDIATE_FIELD)) CALL FIELD_PARAMETER_SET_DATA_RESTORE(INTERMEDIATE_FIELD, &
                         & FIELD_U_VARIABLE_TYPE,FIELD_VALUES_SET_TYPE,INTERMEDIATE_DATA,ERR,ERROR,*999)
 
+                      CALL CustomProfilingStop('cellml data restore')
+                      CALL CustomProfilingStart('cellml field update')
+
                       !Make sure fields have been updated to the current value of any mapped CellML fields
                       CALL CELLML_CELLML_TO_FIELD_UPDATE(CELLML_ENVIRONMENT,ERR,ERROR,*999)
+
+                      CALL CustomProfilingStop('cellml field update')
 
                     ELSE
                       LOCAL_ERROR="The CellML models field is not associated for CellML index "// &
