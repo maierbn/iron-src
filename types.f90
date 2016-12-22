@@ -3274,7 +3274,86 @@ END TYPE GENERATED_MESH_ELLIPSOID_TYPE
   !
   !================================================================================================================================
   !
+ CONTAINS
 
+ SUBROUTINE Print_equations_type(equ_ty, str)
+   TYPE(EQUATIONS_TYPE), INTENT(IN)  :: equ_ty
+   CHARACTER(LEN=*), INTENT(IN)      :: str
+   
+   WRITE(*,*) 'Information for '//str//' of type EQUATIONS_TYPE'
+   
+  ! IF (allocated(equ_ty%EQUATIONS_SET)) THEN
+  !   write(*,*) 'pointer to the equations_set allocated' 
+     IF (associated(equ_ty%EQUATIONS_SET)) THEN
+       write(*,*) 'pointer to the equations_set associated'
+     ELSE
+       write(*,*) 'pointer to the equations_set NOT associcated' 
+     ENDIF
+  ! ELSE
+  !   write(*,*) 'pointer to the equations_set NOT allocated'
+  ! ENDIF
+
+   
+   write(*,*) 'Type is finished: ', equ_ty%EQUATIONS_FINISHED
+   write(*,*) 'Linearity ', equ_ty%LINEARITY, &
+     & ', Time dependence ', equ_ty%TIME_DEPENDENCE, &
+     & ', Output type ', equ_ty%OUTPUT_TYPE, &
+     & ', Sparsity type ', equ_ty%SPARSITY_TYPE, &
+     & ', Lumping type ', equ_ty%LUMPING_TYPE
+
+   !IF (allocated(equ_ty%INTERPOLATION)) THEN
+   !  write(*,*) 'pointer to the interpolation information allocated'
+      IF (associated(equ_ty%INTERPOLATION)) THEN
+       write(*,*) 'pointer to the interpolation information associated'
+     ELSE
+       write(*,*) 'pointer to the interpolation information NOT associcated' 
+     ENDIF
+   !ELSE
+   !  write(*,*) 'pointer to the interpolation information NOT allocated'
+   !ENDIF
+  
+   
+  ! IF (allocated(equ_ty%EQUATIONS_MAPPING)) THEN
+  !   write(*,*) 'pointer to the equations mapping allocated'
+     IF (associated(equ_ty%EQUATIONS_MAPPING)) THEN
+       write(*,*) 'pointer to the equations mapping associated'
+     ELSE
+       write(*,*) 'pointer to the equations mapping NOT associcated' 
+     ENDIF
+  ! ELSE
+  !   write(*,*) 'pointer to the equations mapping NOT allocated'
+  ! ENDIF
+   
+  ! IF (allocated(equ_ty%EQUATIONS_MATRICES)) THEN
+  !   write(*,*) 'pointer to the equations matrices allocated'
+     IF (associated(equ_ty%EQUATIONS_MATRICES)) THEN
+       write(*,*) 'pointer to the equations matrices associated'
+     ELSE
+       write(*,*) 'pointer to the equations matrices NOT associcated' 
+     ENDIF
+  ! ELSE
+  !   write(*,*) 'pointer to the equations matrices NOT allocated'
+  ! ENDIF
+   
+   
+   WRITE(*,*) ''
+        
+   RETURN
+ END SUBROUTINE Print_equations_type
+ 
+!  TYPE EQUATIONS_TYPE
+!    TYPE(EQUATIONS_SET_TYPE), POINTER :: EQUATIONS_SET !<A pointer to the equations_set
+!    LOGICAL :: EQUATIONS_FINISHED !<Is .TRUE. if the equations have finished being created, .FALSE. if not.
+!    INTEGER(INTG) :: LINEARITY !<The equations linearity type \see EQUATIONS_SET_CONSTANTS_LinearityTypes,EQUATIONS_SET_CONSTANTS
+!    INTEGER(INTG) :: TIME_DEPENDENCE !<The equations time dependence type \see EQUATIONS_SET_CONSTANTS_TimeDependenceTypes,EQUATIONS_SET_CONSTANTS
+!    INTEGER(INTG) :: OUTPUT_TYPE !<The output type for the equations \see EQUATIONS_ROUTINES_EquationsOutputTypes,EQUATIONS_ROUTINES
+!    INTEGER(INTG) :: SPARSITY_TYPE !<The sparsity type for the equation matrices of the equations \see EQUATIONS_ROUTINES_EquationsSparsityTypes,EQUATIONS_ROUTINES
+!    INTEGER(INTG) :: LUMPING_TYPE !<The lumping type for the equation matrices of the equations \see EQUATIONS_ROUTINES_EquationsLumpingTypes,EQUATIONS_ROUTINES
+!    TYPE(EQUATIONS_INTERPOLATION_TYPE), POINTER :: INTERPOLATION !<A pointer to the interpolation information used in the equations.
+!    TYPE(EQUATIONS_MAPPING_TYPE), POINTER :: EQUATIONS_MAPPING !<A pointer to the equations mapping for the equations.
+!    TYPE(EQUATIONS_MATRICES_TYPE), POINTER :: EQUATIONS_MATRICES !<A pointer to the equations matrices and vectors used for the equations.
+!  END TYPE EQUATIONS_TYPE
+ 
 
 END MODULE TYPES
 
