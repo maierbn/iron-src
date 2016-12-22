@@ -101,7 +101,12 @@ CONTAINS
     INTEGER(INTG) :: SizePerElement  !< number of bytes of one element
 
     MemoryConsumption = REAL(TotalSize, LINTG)
-    SizePerElement = TotalSize / NumberOfElements
+
+    IF (NumberOfElements > 0) THEN
+      SizePerElement = TotalSize / NumberOfElements
+    ELSE
+      SizePerElement = 1
+    ENDIF
 
     ! find index of identifier
     CurrentIndex = GetMemoryIndex(Identifier)
