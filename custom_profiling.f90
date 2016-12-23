@@ -176,7 +176,7 @@ CONTAINS
     CustomProfilingGetInfo = NEW_LINE('A') // '---------------------Profiling Info-----------------------' // NEW_LINE('A')
     CustomProfilingGetInfo = TRIM(CustomProfilingGetInfo) // "Timing" // NEW_LINE('A')
     DO I = 1,SizeDuration
-      WRITE(Line,"(3A,F17.13,A,I10,2A)") "   ", (DurationIdentifiers(I)), ": ", Durations(I), ' s', &
+      WRITE(Line,"(3A,F25.13,A,I10,2A)") "   ", (DurationIdentifiers(I)), ": ", Durations(I), ' s', &
 	& TimeCount(I), 'x', NEW_LINE('A')
       CustomProfilingGetInfo = TRIM(CustomProfilingGetInfo) // TRIM(Line)
     ENDDO
