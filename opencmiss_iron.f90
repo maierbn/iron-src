@@ -48238,11 +48238,11 @@ CONTAINS
     CALL TAU_STATIC_PHASE_START('problem Solve')
 #endif
 
-    CALL CustomProfilingStart('1. problem solve')
+
 
     CALL PROBLEM_SOLVE(problem%problem,err,error,*999)
 
-    CALL CustomProfilingStop('1. problem solve')
+
 
 #ifdef TAUPROF
     CALL TAU_STATIC_PHASE_STOP('problem Solve')

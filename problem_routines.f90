@@ -339,9 +339,9 @@ CONTAINS
         IF(ASSOCIATED(SOLVER)) THEN
           CALL CPU_TIME(TIME1)
 
-          CALL CustomProfilingStart("cellml solve (*)")
+
           CALL SOLVER_SOLVE(SOLVER,ERR,ERROR,*999)
-          CALL CustomProfilingStop("cellml solve (*)")
+
 
           CALL CPU_TIME(TIME2)
           TIMING_ODE_SOLVER = TIMING_ODE_SOLVER + (TIME2 - TIME1)
@@ -576,11 +576,11 @@ CONTAINS
                   & ERR,ERROR,*999)
               ENDIF
 
-              CALL CustomProfilingStart("1.1/2 pre solve")
+
               !Perform any pre-loop actions.
               CALL PROBLEM_CONTROL_LOOP_PRE_LOOP(CONTROL_LOOP,ERR,ERROR,*999)
 
-              CALL CustomProfilingStop("1.1/2 pre solve")
+
 
               IF(CONTROL_LOOP%NUMBER_OF_SUB_LOOPS==0) THEN
                 !If there are no sub loops then solve.
@@ -603,12 +603,12 @@ CONTAINS
                 ENDDO !loop_idx
               ENDIF
 
-              CALL CustomProfilingStart("1.1/2 post solve")
+
 
               !Perform any post loop actions.
               CALL PROBLEM_CONTROL_LOOP_POST_LOOP(CONTROL_LOOP,ERR,ERROR,*999)
 
-              CALL CustomProfilingStop("1.1/2 post solve")
+
 
               !Increment loop counter and time
               TIME_LOOP%ITERATION_NUMBER=TIME_LOOP%ITERATION_NUMBER+1
@@ -684,9 +684,9 @@ CONTAINS
                     & LOAD_INCREMENT_LOOP%MAXIMUM_NUMBER_OF_ITERATIONS,ERR,ERROR,*999)
                 ENDIF
 
-                CALL CustomProfilingStart("1.3.1 pre solve")
+
                 CALL PROBLEM_CONTROL_LOOP_PRE_LOOP(CONTROL_LOOP,ERR,ERROR,*999)
-                CALL CustomProfilingStop("1.3.1 pre solve")
+
 
                 IF(CONTROL_LOOP%NUMBER_OF_SUB_LOOPS==0) THEN
                   !If there are no sub loops then solve
@@ -695,16 +695,15 @@ CONTAINS
                     DO solver_idx=1,SOLVERS%NUMBER_OF_SOLVERS
                       SOLVER=>SOLVERS%SOLVERS(solver_idx)%PTR
                       IF(ASSOCIATED(SOLVER)) THEN
-                        IF(ASSOCIATED(SOLVER%SOLVER_EQUATIONS)) THEN
-                          CALL CustomProfilingStart("1.3.2 apply incremented BC")
+
                           !Apply incremented boundary conditions here =>
                           CALL PROBLEM_SOLVER_LOAD_INCREMENT_APPLY(SOLVER%SOLVER_EQUATIONS,LOAD_INCREMENT_LOOP%ITERATION_NUMBER, &
                             & LOAD_INCREMENT_LOOP%MAXIMUM_NUMBER_OF_ITERATIONS,ERR,ERROR,*999)
-                          CALL CustomProfilingStop("1.3.2 apply incremented BC")
+
                         ENDIF
-                        CALL CustomProfilingStart("1.3.3 solve")
+
                         CALL PROBLEM_SOLVER_SOLVE(SOLVER,ERR,ERROR,*999)
-                        CALL CustomProfilingStop("1.3.3 solve")
+
                       ELSE
                         CALL FlagError("Solver is not associated.",ERR,ERROR,*999)
                       ENDIF
@@ -720,9 +719,9 @@ CONTAINS
                   ENDDO !loop_idx
                 ENDIF
 
-                CALL CustomProfilingStart("1.3.4 post solve")
+
                 CALL PROBLEM_CONTROL_LOOP_POST_LOOP(CONTROL_LOOP,ERR,ERROR,*999)
-                CALL CustomProfilingStop("1.3.4 post solve")
+
 
               ENDDO !while loop
             ENDIF
@@ -2392,10 +2391,10 @@ CONTAINS
 
             CALL CPU_TIME(TIME1)
 
-            CALL CustomProfilingStart("1.3.3.1 static nonlinear solve (*)")
+
             CALL Problem_SolverEquationsStaticNonlinearSolve(SOLVER_EQUATIONS,ERR,ERROR,*999)
 
-            CALL CustomProfilingStop("1.3.3.1 static nonlinear solve (*)")
+
 
             CALL CPU_TIME(TIME2)
             TIMING_FE_SOLVER = TIMING_FE_SOLVER + (TIME2 - TIME1)
@@ -2421,11 +2420,11 @@ CONTAINS
           SELECT CASE(SOLVER_EQUATIONS%LINEARITY)
           CASE(SOLVER_EQUATIONS_LINEAR)
             CALL CPU_TIME(TIME1)
-            CALL CustomProfilingStart("1.2. dynamic linear solve (*)")
+
 
             CALL Problem_SolverEquationsDynamicLinearSolve(SOLVER_EQUATIONS,ERR,ERROR,*999)
 
-            CALL CustomProfilingStop("1.2. dynamic linear solve (*)")
+
             CALL CPU_TIME(TIME2)
             TIMING_PARABOLIC_SOLVER = TIMING_PARABOLIC_SOLVER + (TIME2 - TIME1)
 
@@ -2486,7 +2485,7 @@ CONTAINS
             SOLVER_MAPPING=>SOLVER_EQUATIONS%SOLVER_MAPPING
             IF(ASSOCIATED(SOLVER_MAPPING)) THEN
 
-              CALL CustomProfilingStart("1.2.1 assemble equations")
+
               !Make sure the equations sets are up to date
               DO equations_set_idx=1,SOLVER_MAPPING%NUMBER_OF_EQUATIONS_SETS
                 EQUATIONS_SET=>SOLVER_MAPPING%EQUATIONS_SETS(equations_set_idx)%PTR
@@ -2494,8 +2493,8 @@ CONTAINS
                 CALL EQUATIONS_SET_ASSEMBLE(EQUATIONS_SET,ERR,ERROR,*999)
               ENDDO !equations_set_idx
 
-              CALL CustomProfilingStop("1.2.1 assemble equations")
-              CALL CustomProfilingStart("1.2.2 get loop time")
+
+
 
               !Get current control loop times. The control loop may be a sub loop below a time loop, so iterate up
               !through loops checking for the time loop
@@ -2515,14 +2514,14 @@ CONTAINS
               !Set the solver time
               CALL SOLVER_DYNAMIC_TIMES_SET(SOLVER,CURRENT_TIME,TIME_INCREMENT,ERR,ERROR,*999)
 
-              CALL CustomProfilingStop("1.2.2 get loop time")
-              CALL CustomProfilingStart("1.2.3 solve")
+
+
 
               !Solve for the next time i.e., current time + time increment
               CALL SOLVER_SOLVE(SOLVER,ERR,ERROR,*999)
 
-              CALL CustomProfilingStop("1.2.3 solve")
-              CALL CustomProfilingStart("1.2.4 back-substitute")
+
+
 
               !Back-substitute to find flux values for linear problems
               DO equations_set_idx=1,SOLVER_MAPPING%NUMBER_OF_EQUATIONS_SETS
@@ -2530,7 +2529,7 @@ CONTAINS
                 CALL EQUATIONS_SET_BACKSUBSTITUTE(EQUATIONS_SET,SOLVER_EQUATIONS%BOUNDARY_CONDITIONS,ERR,ERROR,*999)
               ENDDO !equations_set_idx
 
-              CALL CustomProfilingStop("1.2.4 back-substitute")
+
             ELSE
               CALL FlagError("Solver equations solver mapping is not associated.",ERR,ERROR,*999)
             ENDIF
@@ -2931,19 +2930,19 @@ CONTAINS
           !Apply boundary conditition
           !PRINT*, "Apply boundary conditition"
 
-          CALL CustomProfilingStart("1.3.3.1.1 apply BC, assemble")
+
           DO equations_set_idx=1,SOLVER_MAPPING%NUMBER_OF_EQUATIONS_SETS
             EQUATIONS_SET=>SOLVER_MAPPING%EQUATIONS_SETS(equations_set_idx)%PTR
             !Assemble the equations set
             CALL EQUATIONS_SET_ASSEMBLE(EQUATIONS_SET,ERR,ERROR,*999)
           ENDDO !equations_set_idx
-          CALL CustomProfilingStop("1.3.3.1.1 apply BC, assemble")
+
 
           !PRINT*, "Interface conditions: ", SOLVER_MAPPING%NUMBER_OF_INTERFACE_CONDITIONS
 
           !Make sure the interface matrices are up to date
 
-          CALL CustomProfilingStart("1.3.3.1.2 assemble interface conditions")
+
           DO interface_condition_idx=1,SOLVER_MAPPING%NUMBER_OF_INTERFACE_CONDITIONS
 #ifdef TAUPROF
             WRITE (CVAR,'(a8,i2)') 'Interface',interface_condition_idx
@@ -2957,13 +2956,13 @@ CONTAINS
 #endif
           ENDDO !interface_condition_idx
 
-          CALL CustomProfilingStop("1.3.3.1.2 assemble interface conditions")
-          CALL CustomProfilingStart("1.3.3.1.3 solve")
+
+
 
           !Solve
           CALL SOLVER_SOLVE(SOLVER,ERR,ERROR,*999)
-          CALL CustomProfilingStop("1.3.3.1.3 solve")
-          CALL CustomProfilingStart("1.3.3.1.4 update residual")
+
+
 
           !Update the rhs field variable with residuals or backsubstitute for any linear
           !equations sets
@@ -2984,7 +2983,7 @@ CONTAINS
             ENDIF
           ENDDO !equations_set_idx
 
-          CALL CustomProfilingStop("1.3.3.1.4 update residual")
+
 
         ELSE
           CALL FlagError("Solver equations solver mapping not associated.",ERR,ERROR,*999)
@@ -3030,9 +3029,7 @@ CONTAINS
 #ifdef TAUPROF
       CALL TAU_STATIC_PHASE_START('Pre solve')
 #endif
-      CALL CustomProfilingStart("problem_solver_pre_solve")
       CALL PROBLEM_SOLVER_PRE_SOLVE(SOLVER,ERR,ERROR,*999)
-      CALL CustomProfilingStop("problem_solver_pre_solve")
 #ifdef TAUPROF
       CALL TAU_STATIC_PHASE_STOP('Pre solve')
 
@@ -3046,11 +3043,8 @@ CONTAINS
         !Check for other equations.
         IF(ASSOCIATED(SOLVER%CELLML_EQUATIONS)) THEN
           !A solver with CellML equations.
-          CALL CustomProfilingStart("1.1. problem cellml solve")
 
           CALL PROBLEM_CELLML_EQUATIONS_SOLVE(SOLVER%CELLML_EQUATIONS,ERR,ERROR,*999)
-
-          CALL CustomProfilingStop("1.1. problem cellml solve")
 
         ELSEIF(SOLVER%SOLVE_TYPE==SOLVER_GEOMETRIC_TRANSFORMATION_TYPE) THEN
           CALL Problem_SolverGeometricTransformationSolve(SOLVER%geometricTransformationSolver,ERR,ERROR,*999)
@@ -3064,9 +3058,7 @@ CONTAINS
 
       CALL TAU_STATIC_PHASE_START('Post solve')
 #endif
-      CALL CustomProfilingStart("problem_solver_post_solve")
       CALL PROBLEM_SOLVER_POST_SOLVE(SOLVER,ERR,ERROR,*999)
-      CALL CustomProfilingStop("problem_solver_post_solve")
 #ifdef TAUPROF
       CALL TAU_STATIC_PHASE_STOP('Post solve')
 #endif

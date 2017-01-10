@@ -2674,16 +2674,16 @@ CONTAINS
               !Set up the Local to Global mappings
               ALLOCATE(PETSC_MATRIX%GLOBAL_ROW_NUMBERS(PETSC_MATRIX%M),STAT=ERR)
               IF(ERR/=0) CALL FlagError("Could not allocate global row numbers for PETSc distributed matrix.",ERR,ERROR,*999)
-              CALL CustomProfilingMemory("distributed matrix petsc, block storage (local to global mapping)", &
-               & PETSC_MATRIX%M, INT(SIZEOF(PETSC_MATRIX%GLOBAL_ROW_NUMBERS)))
+
+
               DO i=1,PETSC_MATRIX%M
                 PETSC_MATRIX%GLOBAL_ROW_NUMBERS(i)=ROW_DOMAIN_MAPPING%LOCAL_TO_GLOBAL_MAP(i)-1 !PETSc uses 0 based indexing
               ENDDO !i
               !Set up the matrix
               ALLOCATE(PETSC_MATRIX%DATA_DP(PETSC_MATRIX%DATA_SIZE),STAT=ERR)
               IF(ERR/=0) CALL FlagError("Could not allocate PETSc matrix data.",ERR,ERROR,*999)
-              CALL CustomProfilingMemory("distributed matrix petsc, block storage", &
-                & PETSC_MATRIX%DATA_SIZE, INT(SIZEOF(PETSC_MATRIX%DATA_DP)))
+
+
               CALL Petsc_MatCreateDense(COMPUTATIONAL_ENVIRONMENT%MPI_COMM,PETSC_MATRIX%M,PETSC_MATRIX%N, &
                 & PETSC_MATRIX%GLOBAL_M,PETSC_MATRIX%GLOBAL_N,PETSC_MATRIX%DATA_DP,PETSC_MATRIX%MATRIX,ERR,ERROR,*999)
             CASE(DISTRIBUTED_MATRIX_DIAGONAL_STORAGE_TYPE)
@@ -2693,20 +2693,20 @@ CONTAINS
               !Set up the Local to Global mappings
               ALLOCATE(PETSC_MATRIX%GLOBAL_ROW_NUMBERS(PETSC_MATRIX%M),STAT=ERR)
               IF(ERR/=0) CALL FlagError("Could not allocate global row numbers for PETSc distributed matrix.",ERR,ERROR,*999)
-              CALL CustomProfilingMemory("distributed matrix petsc, diagonal storage (local to global mapping)", &
-                & PETSC_MATRIX%M, INT(SIZEOF(PETSC_MATRIX%GLOBAL_ROW_NUMBERS)))
+
+
               DO i=1,PETSC_MATRIX%M
                 PETSC_MATRIX%GLOBAL_ROW_NUMBERS(i)=ROW_DOMAIN_MAPPING%LOCAL_TO_GLOBAL_MAP(i)-1 !PETSc uses 0 based indexing
               ENDDO !i
               !Set up the matrix
               ALLOCATE(PETSC_MATRIX%DIAGONAL_NUMBER_NON_ZEROS(PETSC_MATRIX%N),STAT=ERR)
               IF(ERR/=0) CALL FlagError("Could not allocate diagonal number of non zeros.",ERR,ERROR,*999)
-              CALL CustomProfilingMemory("distributed matrix petsc, diagonal storage", &
-                & PETSC_MATRIX%N, INT(SIZEOF(PETSC_MATRIX%DIAGONAL_NUMBER_NON_ZEROS)))
+
+
               ALLOCATE(PETSC_MATRIX%OFFDIAGONAL_NUMBER_NON_ZEROS(PETSC_MATRIX%N),STAT=ERR)
               IF(ERR/=0) CALL FlagError("Could not allocate off diagonal number of non zeros.",ERR,ERROR,*999)
-              CALL CustomProfilingMemory("distributed matrix petsc, diagonal storage, offdiag", &
-                & PETSC_MATRIX%N, INT(SIZEOF(PETSC_MATRIX%OFFDIAGONAL_NUMBER_NON_ZEROS)))
+
+
               PETSC_MATRIX%DIAGONAL_NUMBER_NON_ZEROS=1
               PETSC_MATRIX%OFFDIAGONAL_NUMBER_NON_ZEROS=0
               !Create the PETsc AIJ matrix
@@ -2731,8 +2731,8 @@ CONTAINS
                   !Set up the Local to Global mappings
                   ALLOCATE(PETSC_MATRIX%GLOBAL_ROW_NUMBERS(PETSC_MATRIX%M),STAT=ERR)
                   IF(ERR/=0) CALL FlagError("Could not allocate global row numbers for PETSc distributed matrix.",ERR,ERROR,*999)
-                  CALL CustomProfilingMemory("distributed matrix petsc, compr. row storage (local to global mapping)", &
-                    & PETSC_MATRIX%M, INT(SIZEOF(PETSC_MATRIX%GLOBAL_ROW_NUMBERS)))
+
+
                   PETSC_MATRIX%MAXIMUM_COLUMN_INDICES_PER_ROW=0
                   DO i=1,PETSC_MATRIX%M
                     PETSC_MATRIX%GLOBAL_ROW_NUMBERS(i)=ROW_DOMAIN_MAPPING%LOCAL_TO_GLOBAL_MAP(i)-1 !PETSc uses 0 based indexing
@@ -3020,24 +3020,24 @@ CONTAINS
                           !Allocate the PETSc sparsity storage arrays
                           ALLOCATE(PETSC_MATRIX%DIAGONAL_NUMBER_NON_ZEROS(PETSC_MATRIX%M),STAT=ERR)
                           IF(ERR/=0) CALL FlagError("Could not allocate PETSc matrix diagonal number of non zeros.",ERR,ERROR,*999)
-                          CALL CustomProfilingMemory("distributed matrix petsc, compr. row storage diag", &
-                            & PETSC_MATRIX%M, INT(SIZEOF(PETSC_MATRIX%DIAGONAL_NUMBER_NON_ZEROS)))
+
+
                           PETSC_MATRIX%DIAGONAL_NUMBER_NON_ZEROS=0
                           ALLOCATE(PETSC_MATRIX%OFFDIAGONAL_NUMBER_NON_ZEROS(PETSC_MATRIX%M),STAT=ERR)
                           IF(ERR/=0) CALL FlagError("Could not allocate PETSc matrix off diagonal number of non zeros.", &
                             & ERR,ERROR,*999)
-                          CALL CustomProfilingMemory("distributed matrix petsc, compr. row storage, offdiag", &
-                            & PETSC_MATRIX%M, INT(SIZEOF(PETSC_MATRIX%OFFDIAGONAL_NUMBER_NON_ZEROS)))
+
+
                           PETSC_MATRIX%OFFDIAGONAL_NUMBER_NON_ZEROS=0
                           ALLOCATE(PETSC_MATRIX%ROW_INDICES(PETSC_MATRIX%M+1),STAT=ERR)
                           IF(ERR/=0) CALL FlagError("Could not allocate PETSc matrix row indices.",ERR,ERROR,*999)
-                          CALL CustomProfilingMemory("distributed matrix petsc, compr. row storage, row ind.", &
-                            & PETSC_MATRIX%M+1, INT(SIZEOF(PETSC_MATRIX%ROW_INDICES)))
+
+
                           PETSC_MATRIX%ROW_INDICES(1:PETSC_MATRIX%M+1)=ROW_INDICES(1:PETSC_MATRIX%M+1)
                           ALLOCATE(PETSC_MATRIX%COLUMN_INDICES(PETSC_MATRIX%NUMBER_NON_ZEROS),STAT=ERR)
                           IF(ERR/=0) CALL FlagError("Could not allocate PETSc matrix column indices.",ERR,ERROR,*999)
-                          CALL CustomProfilingMemory("distributed matrix petsc, compr. row storage, col. ind.", &
-                            & PETSC_MATRIX%NUMBER_NON_ZEROS, INT(SIZEOF(PETSC_MATRIX%COLUMN_INDICES)))
+
+
                           PETSC_MATRIX%COLUMN_INDICES(1:PETSC_MATRIX%NUMBER_NON_ZEROS)= &
                             & COLUMN_INDICES(1:PETSC_MATRIX%NUMBER_NON_ZEROS)
                           !Check the column indices are correct and calculate number of diagonal and off-diagonal columns
@@ -6325,23 +6325,23 @@ CONTAINS
           CASE(MATRIX_VECTOR_INTG_TYPE)
             ALLOCATE(CMISS_VECTOR%DATA_INTG(CMISS_VECTOR%DATA_SIZE),STAT=ERR)
             IF(ERR/=0) CALL FlagError("Could not allocate CMISS distributed vector integer data.",ERR,ERROR,*999)
-            CALL CustomProfilingMemory("distributed vector cmiss INTG", &
-              & CMISS_VECTOR%DATA_SIZE, INT(SIZEOF(CMISS_VECTOR%DATA_INTG)))
+
+
           CASE(MATRIX_VECTOR_SP_TYPE)
             ALLOCATE(CMISS_VECTOR%DATA_SP(CMISS_VECTOR%DATA_SIZE),STAT=ERR)
             IF(ERR/=0) CALL FlagError("Could not allocate CMISS distributed vector single precsion data.",ERR,ERROR,*999)
-            CALL CustomProfilingMemory("distributed vector cmiss SP", &
-              & CMISS_VECTOR%DATA_SIZE, INT(SIZEOF(CMISS_VECTOR%DATA_SP)))
+
+
           CASE(MATRIX_VECTOR_DP_TYPE)
             ALLOCATE(CMISS_VECTOR%DATA_DP(CMISS_VECTOR%DATA_SIZE),STAT=ERR)
             IF(ERR/=0) CALL FlagError("Could not allocate CMISS distributed vector double precsion data.",ERR,ERROR,*999)
-            CALL CustomProfilingMemory("distributed vector cmiss DP", &
-              & CMISS_VECTOR%DATA_SIZE, INT(SIZEOF(CMISS_VECTOR%DATA_DP)))
+
+
           CASE(MATRIX_VECTOR_L_TYPE)
             ALLOCATE(CMISS_VECTOR%DATA_L(CMISS_VECTOR%DATA_SIZE),STAT=ERR)
             IF(ERR/=0) CALL FlagError("Could not allocate CMISS distributed vector logical data.",ERR,ERROR,*999)
-            CALL CustomProfilingMemory("distributed vector cmiss L", &
-              & CMISS_VECTOR%DATA_SIZE, INT(SIZEOF(CMISS_VECTOR%DATA_L)))
+
+
           CASE DEFAULT
             LOCAL_ERROR="The distributed vector data type of "// &
               & TRIM(NumberToVString(DISTRIBUTED_VECTOR%DATA_TYPE,"*",ERR,ERROR))//" is invalid."
@@ -6360,8 +6360,8 @@ CONTAINS
             IF(DISTRIBUTED_VECTOR%GHOSTING_TYPE==DISTRIBUTED_MATRIX_VECTOR_INCLUDE_GHOSTS_TYPE) THEN
               ALLOCATE(CMISS_VECTOR%TRANSFERS(DOMAIN_MAPPING%NUMBER_OF_ADJACENT_DOMAINS),STAT=ERR)
               IF(ERR/=0) CALL FlagError("Could not allocate CMISS distributed vector transfer buffers.",ERR,ERROR,*999)
-              CALL CustomProfilingMemory("distributed vector cmiss, ghosts", &
-                & DOMAIN_MAPPING%NUMBER_OF_ADJACENT_DOMAINS, INT(SIZEOF(CMISS_VECTOR%TRANSFERS)))
+
+
               DO domain_idx=1,DOMAIN_MAPPING%NUMBER_OF_ADJACENT_DOMAINS
                 CALL DistributedVector_CmissTransferInitialise(CMISS_VECTOR,domain_idx,ERR,ERROR,*999)
                 CMISS_VECTOR%TRANSFERS(domain_idx)%SEND_BUFFER_SIZE=DOMAIN_MAPPING%ADJACENT_DOMAINS(domain_idx)% &
@@ -6393,16 +6393,15 @@ CONTAINS
                     & SEND_BUFFER_SIZE),STAT=ERR)
                   IF(ERR/=0) CALL FlagError("Could not allocate distributed vector send integer transfer buffer.",ERR,ERROR,*999)
 
-                  CALL CustomProfilingMemory("distributed vector cmiss, send buffer", CMISS_VECTOR%TRANSFERS(domain_idx)% &
-                    & SEND_BUFFER_SIZE, INT(SIZEOF(CMISS_VECTOR%TRANSFERS(domain_idx)%SEND_BUFFER_INTG)))
+
 
                   ALLOCATE(CMISS_VECTOR%TRANSFERS(domain_idx)%RECEIVE_BUFFER_INTG(CMISS_VECTOR%TRANSFERS(domain_idx)% &
                     & RECEIVE_BUFFER_SIZE),STAT=ERR)
                   IF(ERR/=0) CALL FlagError("Could not allocate distributed vector receive integer transfer buffer.", &
                     & ERR,ERROR,*999)
 
-                  CALL CustomProfilingMemory("distributed vector cmiss, recv buffer", CMISS_VECTOR%TRANSFERS(domain_idx)% &
-                    & RECEIVE_BUFFER_SIZE, INT(SIZEOF(CMISS_VECTOR%TRANSFERS(domain_idx)%RECEIVE_BUFFER_INTG)))
+
+
 
                 CASE(DISTRIBUTED_MATRIX_VECTOR_SP_TYPE)
                   ALLOCATE(CMISS_VECTOR%TRANSFERS(domain_idx)%SEND_BUFFER_SP(CMISS_VECTOR%TRANSFERS(domain_idx)% &
@@ -6410,16 +6409,16 @@ CONTAINS
                   IF(ERR/=0) CALL FlagError("Could not allocate distributed vector send single precision transfer buffer.", &
                     & ERR,ERROR,*999)
 
-                  CALL CustomProfilingMemory("distributed vector cmiss, send buffer", CMISS_VECTOR%TRANSFERS(domain_idx)% &
-                    & SEND_BUFFER_SIZE, INT(SIZEOF(CMISS_VECTOR%TRANSFERS(domain_idx)%SEND_BUFFER_SP)))
+
+
 
                   ALLOCATE(CMISS_VECTOR%TRANSFERS(domain_idx)%RECEIVE_BUFFER_SP(CMISS_VECTOR%TRANSFERS(domain_idx)% &
                     & RECEIVE_BUFFER_SIZE),STAT=ERR)
                   IF(ERR/=0) CALL FlagError("Could not allocate distributed vector receive single precision transfer buffer.", &
                     & ERR,ERROR,*999)
 
-                  CALL CustomProfilingMemory("distributed vector cmiss, recv buffer", CMISS_VECTOR%TRANSFERS(domain_idx)% &
-                    & RECEIVE_BUFFER_SIZE, INT(SIZEOF(CMISS_VECTOR%TRANSFERS(domain_idx)%RECEIVE_BUFFER_SP)))
+
+
 
                 CASE(DISTRIBUTED_MATRIX_VECTOR_DP_TYPE)
 
@@ -6428,16 +6427,16 @@ CONTAINS
                   IF(ERR/=0) CALL FlagError("Could not allocate distributed vector send double precision transfer buffer.", &
                     & ERR,ERROR,*999)
 
-                  CALL CustomProfilingMemory("distributed vector cmiss, send buffer", CMISS_VECTOR%TRANSFERS(domain_idx)% &
-                    & SEND_BUFFER_SIZE, INT(SIZEOF(CMISS_VECTOR%TRANSFERS(domain_idx)%SEND_BUFFER_DP)))
+
+
 
                   ALLOCATE(CMISS_VECTOR%TRANSFERS(domain_idx)%RECEIVE_BUFFER_DP(CMISS_VECTOR%TRANSFERS(domain_idx)% &
                     & RECEIVE_BUFFER_SIZE),STAT=ERR)
                   IF(ERR/=0) CALL FlagError("Could not allocate distributed vector receive double precision transfer buffer.", &
                     & ERR,ERROR,*999)
 
-                  CALL CustomProfilingMemory("distributed vector cmiss, recv buffer", CMISS_VECTOR%TRANSFERS(domain_idx)% &
-                    & RECEIVE_BUFFER_SIZE, INT(SIZEOF(CMISS_VECTOR%TRANSFERS(domain_idx)%RECEIVE_BUFFER_DP)))
+
+
 
                 CASE(DISTRIBUTED_MATRIX_VECTOR_L_TYPE)
 
@@ -6445,8 +6444,8 @@ CONTAINS
                     & STAT=ERR)
                   IF(ERR/=0) CALL FlagError("Could not allocate distributed vector send logical transfer buffer.",ERR,ERROR,*999)
 
-                  CALL CustomProfilingMemory("distributed vector cmiss, send buffer", CMISS_VECTOR%TRANSFERS(domain_idx)% &
-                    & SEND_BUFFER_SIZE, INT(SIZEOF(CMISS_VECTOR%TRANSFERS(domain_idx)%SEND_BUFFER_L)))
+
+
 
 
                   ALLOCATE(CMISS_VECTOR%TRANSFERS(domain_idx)%RECEIVE_BUFFER_L(CMISS_VECTOR%TRANSFERS(domain_idx)% &
@@ -6454,8 +6453,8 @@ CONTAINS
                   IF(ERR/=0) CALL FlagError("Could not allocate distributed vector receive logical transfer buffer.", &
                     & ERR,ERROR,*999)
 
-                  CALL CustomProfilingMemory("distributed vector cmiss, recv buffer", CMISS_VECTOR%TRANSFERS(domain_idx)% &
-                    & RECEIVE_BUFFER_SIZE, INT(SIZEOF(CMISS_VECTOR%TRANSFERS(domain_idx)%RECEIVE_BUFFER_L)))
+
+
 
                 CASE DEFAULT
                   LOCAL_ERROR="The distributed vector data type of "// &
@@ -7661,8 +7660,8 @@ CONTAINS
           ALLOCATE(DISTRIBUTED_VECTOR%PETSC%GLOBAL_NUMBERS(DISTRIBUTED_VECTOR%PETSC%N),STAT=ERR)
           IF(ERR/=0) CALL FlagError("Could not allocate PETSc distributed vector global numbers.",ERR,ERROR,*999)
 
-          CALL CustomProfilingMemory("distributed vector petsc", &
-            & DISTRIBUTED_VECTOR%PETSC%N, INT(SIZEOF(DISTRIBUTED_VECTOR%PETSC%GLOBAL_NUMBERS)))
+
+
 
           DISTRIBUTED_VECTOR%PETSC%USE_OVERRIDE_VECTOR=.FALSE.
           CALL Petsc_VecInitialise(DISTRIBUTED_VECTOR%PETSC%VECTOR,ERR,ERROR,*999)

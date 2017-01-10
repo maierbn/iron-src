@@ -2371,14 +2371,10 @@ CONTAINS
                             PARAMETER_START_DOF=(dof_idx-1)*MAX_NUMBER_PARAMETERS+1
                             PARAMETER_END_DOF=PARAMETER_START_DOF+NUMBER_PARAMETERS-1
 
-                            CALL CustomProfilingStart('cellml call rhs')
-
                             CALL CELLML_MODEL_DEFINITION_CALL_RHS_ROUTINE(MODEL%PTR,TIME, &
                               & STATE_DATA(STATE_START_DOF:STATE_END_DOF), &
                               & RATES,INTERMEDIATE_DATA(INTERMEDIATE_START_DOF:INTERMEDIATE_END_DOF),PARAMETERS_DATA( &
                               & PARAMETER_START_DOF:PARAMETER_END_DOF))
-
-                            CALL CustomProfilingStop('cellml call rhs')
 
                             STATE_DATA(STATE_START_DOF:STATE_END_DOF)=STATE_DATA(STATE_START_DOF:STATE_END_DOF)+ &
                               & TIME_INCREMENT*RATES(1:NUMBER_STATES)
@@ -2548,17 +2544,9 @@ CONTAINS
 
                       !Make sure CellML fields have been updated to the current value of any mapped fields
 
-                      CALL CustomProfilingStart('1.1.1. cellml field2cellml update')
-
                       CALL CELLML_FIELD_TO_CELLML_UPDATE(CELLML_ENVIRONMENT,ERR,ERROR,*999)
 
-                      CALL CustomProfilingStop('1.1.1. cellml field2cellml update')
-                      CALL CustomProfilingStart('1.1.2. cellml field var get')
-
                       CALL FIELD_VARIABLE_GET(MODELS_FIELD,FIELD_U_VARIABLE_TYPE,MODELS_VARIABLE,ERR,ERROR,*999)
-
-                      CALL CustomProfilingStop('1.1.2. cellml field var get')
-                      CALL CustomProfilingStart('1.1.3. cellml data get')
 
                       CALL FIELD_PARAMETER_SET_DATA_GET(MODELS_FIELD,FIELD_U_VARIABLE_TYPE,FIELD_VALUES_SET_TYPE, &
                         & MODELS_DATA,ERR,ERROR,*999)
@@ -2590,18 +2578,12 @@ CONTAINS
                         ENDIF
                       ENDIF
 
-                      CALL CustomProfilingStop('1.1.3. cellml data get')
-                      CALL CustomProfilingStart('1.1.4. cellml integrate')
-
                       !Integrate these CellML equations
                       CALL SOLVER_DAE_EULER_FORWARD_INTEGRATE(FORWARD_EULER_SOLVER,CELLML_ENVIRONMENT,MODELS_VARIABLE% &
                         & TOTAL_NUMBER_OF_DOFS,DAE_SOLVER%START_TIME,DAE_SOLVER%END_TIME,DAE_SOLVER%INITIAL_STEP, &
                         & CELLML_ENVIRONMENT%MODELS_FIELD%ONLY_ONE_MODEL_INDEX,MODELS_DATA,CELLML_ENVIRONMENT% &
                         & MAXIMUM_NUMBER_OF_STATE,STATE_DATA,CELLML_ENVIRONMENT%MAXIMUM_NUMBER_OF_PARAMETERS, &
                         & PARAMETERS_DATA,CELLML_ENVIRONMENT%MAXIMUM_NUMBER_OF_INTERMEDIATE,INTERMEDIATE_DATA,ERR,ERROR,*999)
-
-                      CALL CustomProfilingStop('1.1.4. cellml integrate')
-                      CALL CustomProfilingStart('1.1.5. cellml data restore')
 
                       !Restore field data
                       CALL FIELD_PARAMETER_SET_DATA_RESTORE(MODELS_FIELD,FIELD_U_VARIABLE_TYPE,FIELD_VALUES_SET_TYPE, &
@@ -2613,13 +2595,8 @@ CONTAINS
                       IF(ASSOCIATED(INTERMEDIATE_FIELD)) CALL FIELD_PARAMETER_SET_DATA_RESTORE(INTERMEDIATE_FIELD, &
                         & FIELD_U_VARIABLE_TYPE,FIELD_VALUES_SET_TYPE,INTERMEDIATE_DATA,ERR,ERROR,*999)
 
-                      CALL CustomProfilingStop('1.1.5. cellml data restore')
-                      CALL CustomProfilingStart('1.1.6. cellml field update')
-
                       !Make sure fields have been updated to the current value of any mapped CellML fields
                       CALL CELLML_CELLML_TO_FIELD_UPDATE(CELLML_ENVIRONMENT,ERR,ERROR,*999)
-
-                      CALL CustomProfilingStop('1.1.6. cellml field update')
 
                     ELSE
                       LOCAL_ERROR="The CellML models field is not associated for CellML index "// &
@@ -6658,27 +6635,16 @@ CONTAINS
             IF(ASSOCIATED(LINEAR_SOLVER)) THEN
               IF(DYNAMIC_SOLVER%SOLVER_INITIALISED) THEN
 
-                CALL CustomProfilingStart("1.2.3.1 dynamic mean predicted calculate")
                 !Assemble the solver equations
                 CALL SOLVER_DYNAMIC_MEAN_PREDICTED_CALCULATE(SOLVER,ERR,ERROR,*999)
 
-                CALL CustomProfilingStop("1.2.3.1 dynamic mean predicted calculate")
-                CALL CustomProfilingStart("1.2.3.2 dynamic assemble")
-
                 CALL SOLVER_MATRICES_DYNAMIC_ASSEMBLE(SOLVER,SOLVER_MATRICES_LINEAR_ONLY,ERR,ERROR,*999)
-                CALL CustomProfilingStop("1.2.3.2 dynamic assemble")
-                CALL CustomProfilingStart("1.2.3.3 solve linear system")
 
                 !Solve the linear system
                 CALL SOLVER_SOLVE(LINEAR_SOLVER,ERR,ERROR,*999)
 
-                CALL CustomProfilingStop("1.2.3.3 solve linear system")
-                CALL CustomProfilingStart("1.2.3.4 update dependent field")
-
                 !Update dependent field with solution
                 CALL SOLVER_VARIABLES_DYNAMIC_FIELD_UPDATE(SOLVER,ERR,ERROR,*999)
-
-                CALL CustomProfilingStop("1.2.3.4 update dependent field")
              ELSE
                 !If we need to initialise the solver
                 IF((DYNAMIC_SOLVER%ORDER==SOLVER_DYNAMIC_FIRST_ORDER.AND.DYNAMIC_SOLVER%DEGREE>SOLVER_DYNAMIC_FIRST_DEGREE).OR. &
@@ -19049,10 +19015,8 @@ CONTAINS
                           !Zero the solution vector
                           CALL DISTRIBUTED_VECTOR_ALL_VALUES_SET(SOLVER_VECTOR,0.0_DP,ERR,ERROR,*999)
                         CASE(SOLVER_SOLUTION_INITIALISE_CURRENT_FIELD)
-                          CALL CustomProfilingStart("1.3.3.1.3.1 newton update solution vector")
                           !Make sure the solver vector contains the current dependent field values
                           CALL SOLVER_SOLUTION_UPDATE(SOLVER,ERR,ERROR,*999)
-                          CALL CustomProfilingStop("1.3.3.1.3.1 newton update solution vector")
                         CASE(SOLVER_SOLUTION_INITIALISE_NO_CHANGE)
                           !Do nothing
                         CASE DEFAULT
@@ -19061,14 +19025,9 @@ CONTAINS
                             & " is invalid."
                           CALL FlagError(LOCAL_ERROR,ERR,ERROR,*999)
                         END SELECT
-
-                        CALL CustomProfilingStart("1.3.3.1.3.2 newton Petsc solve")
                         !Solve the nonlinear equations
                         CALL Petsc_SnesSolve(LINESEARCH_SOLVER%snes,RHS_VECTOR%PETSC%VECTOR,SOLVER_VECTOR%PETSC%VECTOR, &
                           & ERR,ERROR,*999)
-
-                        CALL CustomProfilingStop("1.3.3.1.3.2 newton Petsc solve")
-                        CALL CustomProfilingStart("1.3.3.1.3.3 newton diagnostics")
 
                         !Check for convergence
                         CALL Petsc_SnesGetConvergedReason(LINESEARCH_SOLVER%snes,CONVERGED_REASON,ERR,ERROR,*999)
@@ -19149,8 +19108,6 @@ CONTAINS
                             CALL WRITE_STRING(GENERAL_OUTPUT_TYPE,"Converged Reason = PETSc converged iterating.",ERR,ERROR,*999)
                           END SELECT
                         ENDIF
-
-                        CALL CustomProfilingStop("1.3.3.1.3.3 newton diagnostics")
 
                       CASE DEFAULT
                         LOCAL_ERROR="The Newton line search solver library type of "// &
