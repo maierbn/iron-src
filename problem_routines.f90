@@ -695,7 +695,7 @@ CONTAINS
                     DO solver_idx=1,SOLVERS%NUMBER_OF_SOLVERS
                       SOLVER=>SOLVERS%SOLVERS(solver_idx)%PTR
                       IF(ASSOCIATED(SOLVER)) THEN
-
+                        IF(ASSOCIATED(SOLVER%SOLVER_EQUATIONS)) THEN
                           !Apply incremented boundary conditions here =>
                           CALL PROBLEM_SOLVER_LOAD_INCREMENT_APPLY(SOLVER%SOLVER_EQUATIONS,LOAD_INCREMENT_LOOP%ITERATION_NUMBER, &
                             & LOAD_INCREMENT_LOOP%MAXIMUM_NUMBER_OF_ITERATIONS,ERR,ERROR,*999)
