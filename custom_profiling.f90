@@ -167,8 +167,8 @@ CONTAINS
   !================================================================================================================================
   !
   FUNCTION CustomProfilingGetInfo()
-    CHARACTER(LEN=2000) :: CustomProfilingGetInfo
-    CHARACTER(LEN=1000) :: Line
+    CHARACTER(LEN=200000) :: CustomProfilingGetInfo
+    CHARACTER(LEN=10000) :: Line
     INTEGER :: I, TotalNumberOfObjects = 0
     INTEGER(LINTG) :: TotalMemoryConsumption = 0
 
