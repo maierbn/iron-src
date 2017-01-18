@@ -411,7 +411,8 @@ MODULE OpenCMISS_Iron
   PUBLIC cmfe_SolverEquationsType,cmfe_SolverEquations_Finalise,cmfe_SolverEquations_Initialise
 
   PUBLIC cmfe_CustomProfilingStart,cmfe_CustomProfilingStop,cmfe_CustomProfilingMemory,cmfe_CustomProfilingGetInfo, &
-    & cmfe_CustomProfilingGetDuration,cmfe_CustomProfilingGetMemory,cmfe_CustomProfilingGetSizePerElement
+    & cmfe_CustomProfilingGetDuration,cmfe_CustomProfilingGetMemory,cmfe_CustomProfilingGetSizePerElement, &
+    & cmfe_CustomProfilingGetNumberObjects
 
 !!==================================================================================================================================
 !!
@@ -61820,7 +61821,7 @@ CONTAINS
 
   FUNCTION cmfe_CustomProfilingGetInfo(Err)
     INTEGER(INTG), INTENT(OUT) :: err !<The error code.
-    CHARACTER(LEN=2000) :: cmfe_CustomProfilingGetInfo
+    CHARACTER(LEN=200000) :: cmfe_CustomProfilingGetInfo
 
     cmfe_CustomProfilingGetInfo = CustomProfilingGetInfo()
   END FUNCTION cmfe_CustomProfilingGetInfo
@@ -61842,7 +61843,7 @@ CONTAINS
   FUNCTION cmfe_CustomProfilingGetMemory(Identifier, Err)
     CHARACTER(LEN=*), INTENT(IN)  :: Identifier !< A custom Identifier that describes the timer
     INTEGER(INTG), INTENT(OUT) :: err !<The error code.
-    REAL(DP) :: cmfe_CustomProfilingGetMemory
+    INTEGER(LINTG) :: cmfe_CustomProfilingGetMemory
 
     cmfe_CustomProfilingGetMemory = CustomProfilingGetMemory(Identifier)
   END FUNCTION cmfe_CustomProfilingGetMemory
@@ -61852,9 +61853,22 @@ CONTAINS
   FUNCTION cmfe_CustomProfilingGetSizePerElement(Identifier, Err)
     CHARACTER(LEN=*), INTENT(IN)  :: Identifier !< A custom Identifier that describes the timer
     INTEGER(INTG), INTENT(OUT) :: err !<The error code.
-    REAL(DP) :: cmfe_CustomProfilingGetSizePerElement
+    INTEGER(INTG) :: cmfe_CustomProfilingGetSizePerElement
 
     cmfe_CustomProfilingGetSizePerElement = CustomProfilingGetSizePerElement(Identifier)
   END FUNCTION cmfe_CustomProfilingGetSizePerElement
+
+  !
+  !================================================================================================================================
+  !
+  FUNCTION cmfe_CustomProfilingGetNumberObjects(Identifier, Err)
+    CHARACTER(LEN=*), INTENT(IN)  :: Identifier !< A custom Identifier that describes the timer
+    INTEGER(INTG), INTENT(OUT) :: err !<The error code.
+    INTEGER(INTG) :: cmfe_CustomProfilingGetNumberObjects
+
+    cmfe_CustomProfilingGetNumberObjects = CustomProfilingGetNumberObjects(Identifier)
+  END FUNCTION cmfe_CustomProfilingGetNumberObjects
+
+
 
 END MODULE OpenCMISS_Iron

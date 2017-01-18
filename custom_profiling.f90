@@ -13,6 +13,7 @@ MODULE Custom_Profiling
   PUBLIC :: CustomProfilingGetDuration
   PUBLIC :: CustomProfilingGetMemory
   PUBLIC :: CustomProfilingGetSizePerElement
+  PUBLIC :: CustomProfilingGetNumberObjects
   PRIVATE :: GetDurationIndex
   PRIVATE :: GetMemoryIndex
   PRIVATE :: PrintWarningDuration
@@ -57,7 +58,6 @@ CONTAINS
     ENDIF
 
     CALL CPU_TIME(StartTime(CurrentIndex))
-
   END SUBROUTINE
   !
   !================================================================================================================================
@@ -83,7 +83,6 @@ CONTAINS
     Duration = EndTime - StartTime(CurrentIndex)
     Durations(CurrentIndex) = Durations(CurrentIndex) + Duration
     TimeCount(CurrentIndex) = TimeCount(CurrentIndex) + 1
-
   END SUBROUTINE
 
   !
@@ -224,7 +223,7 @@ CONTAINS
   !
   FUNCTION CustomProfilingGetMemory(Identifier)
     CHARACTER(LEN=*), INTENT(IN)  :: Identifier !< A custom Identifier that describes the timer
-    REAL(8) :: CustomProfilingGetMemory
+    INTEGER(LINTG) :: CustomProfilingGetMemory
 
     INTEGER :: CurrentIndex
 
@@ -244,7 +243,7 @@ CONTAINS
   !
   FUNCTION CustomProfilingGetSizePerElement(Identifier)
     CHARACTER(LEN=*), INTENT(IN)  :: Identifier !< A custom Identifier that describes the timer
-    REAL(8) :: CustomProfilingGetSizePerElement
+    INTEGER(INTG) :: CustomProfilingGetSizePerElement
 
     INTEGER :: CurrentIndex
 
@@ -258,6 +257,26 @@ CONTAINS
     ENDIF
 
     CustomProfilingGetSizePerElement = SizesPerElement(CurrentIndex)
+  END FUNCTION
+  !
+  !================================================================================================================================
+  !
+  FUNCTION CustomProfilingGetNumberObjects(Identifier)
+    CHARACTER(LEN=*), INTENT(IN)  :: Identifier !< A custom Identifier that describes the timer
+    INTEGER :: CustomProfilingGetNumberObjects
+
+    INTEGER :: CurrentIndex
+
+    ! find index of identifier
+    CurrentIndex = GetMemoryIndex(Identifier)
+
+    IF (CurrentIndex == 0) THEN
+      CALL PrintWarningMemory(Identifier)
+      CustomProfilingGetNumberObjects = 0
+      RETURN
+    ENDIF
+
+    CustomProfilingGetNumberObjects = NumberOfObjects(CurrentIndex)
   END FUNCTION
   !
   !================================================================================================================================
