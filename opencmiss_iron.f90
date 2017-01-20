@@ -410,9 +410,13 @@ MODULE OpenCMISS_Iron
 
   PUBLIC cmfe_SolverEquationsType,cmfe_SolverEquations_Finalise,cmfe_SolverEquations_Initialise
 
+#ifdef USE_CUSTOM_PROFILING
   PUBLIC cmfe_CustomProfilingStart,cmfe_CustomProfilingStop,cmfe_CustomProfilingMemory,cmfe_CustomProfilingGetInfo, &
     & cmfe_CustomProfilingGetDuration,cmfe_CustomProfilingGetMemory,cmfe_CustomProfilingGetSizePerElement, &
+#endif
+#ifdef USE_CUSTOM_PROFILING
     & cmfe_CustomProfilingGetNumberObjects
+#endif
 
 !!==================================================================================================================================
 !!
@@ -48239,11 +48243,15 @@ CONTAINS
     CALL TAU_STATIC_PHASE_START('problem Solve')
 #endif
 
+#ifdef USE_CUSTOM_PROFILING
     CALL CustomProfilingStart('1. problem solve')
+#endif
 
     CALL PROBLEM_SOLVE(problem%problem,err,error,*999)
 
+#ifdef USE_CUSTOM_PROFILING
     CALL CustomProfilingStop('1. problem solve')
+#endif
 
 #ifdef TAUPROF
     CALL TAU_STATIC_PHASE_STOP('problem Solve')
@@ -61847,6 +61855,7 @@ CONTAINS
 
     cmfe_CustomProfilingGetMemory = CustomProfilingGetMemory(Identifier)
   END FUNCTION cmfe_CustomProfilingGetMemory
+
   !
   !================================================================================================================================
   !
@@ -61868,7 +61877,6 @@ CONTAINS
 
     cmfe_CustomProfilingGetNumberObjects = CustomProfilingGetNumberObjects(Identifier)
   END FUNCTION cmfe_CustomProfilingGetNumberObjects
-
 
 
 END MODULE OpenCMISS_Iron
