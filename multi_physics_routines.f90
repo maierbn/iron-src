@@ -1,5 +1,5 @@
 !> \file
-!> $Id: multi_physics_routines.f90 177 2009-04-20 
+!> $Id: multi_physics_routines.f90 177 2009-04-20
 !> \authors Christian Michler, Jack Lee
 !> \brief This module handles all multi physics routines.
 !>
@@ -61,7 +61,7 @@ MODULE MULTI_PHYSICS_ROUTINES
   USE STRINGS
   USE TYPES
 
-#include "macros.h"  
+#include "macros.h"
 
 
   IMPLICIT NONE
@@ -77,13 +77,13 @@ MODULE MULTI_PHYSICS_ROUTINES
   !Interfaces
 
   PUBLIC MultiPhysics_FiniteElementJacobianEvaluate,MultiPhysics_FiniteElementResidualEvaluate
-  
+
   PUBLIC MultiPhysics_EquationsSetSpecificationSet,MULTI_PHYSICS_FINITE_ELEMENT_CALCULATE, &
     & MULTI_PHYSICS_EQUATIONS_SET_SETUP,MultiPhysics_EquationsSetSolnMethodSet, &
     & MultiPhysics_ProblemSpecificationSet,MULTI_PHYSICS_PROBLEM_SETUP, &
     & MULTI_PHYSICS_POST_SOLVE,MULTI_PHYSICS_PRE_SOLVE,MULTI_PHYSICS_CONTROL_LOOP_PRE_LOOP, &
     & MULTI_PHYSICS_CONTROL_LOOP_POST_LOOP
-  
+
 CONTAINS
 
   !
@@ -137,7 +137,7 @@ CONTAINS
 999 ERRORS("MultiPhysics_EquationsSetSpecificationSet",err,error)
     EXITS("MultiPhysics_EquationsSetSpecificationSet")
     RETURN 1
-    
+
   END SUBROUTINE MultiPhysics_EquationsSetSpecificationSet
 
   !
@@ -154,7 +154,7 @@ CONTAINS
     TYPE(VARYING_STRING), INTENT(OUT) :: ERROR !<The error string
     !Local Variables
     TYPE(VARYING_STRING) :: LOCAL_ERROR
-    
+
     ENTERS("MULTI_PHYSICS_FINITE_ELEMENT_CALCULATE",ERR,ERROR,*999)
 
     IF(ASSOCIATED(EQUATIONS_SET)) THEN
@@ -183,7 +183,7 @@ CONTAINS
     ELSE
       CALL FlagError("Equations set is not associated",ERR,ERROR,*999)
     ENDIF
-       
+
     EXITS("MULTI_PHYSICS_FINITE_ELEMENT_CALCULATE")
     RETURN
 999 ERRORSEXITS("MULTI_PHYSICS_FINITE_ELEMENT_CALCULATE",ERR,ERROR)
@@ -204,7 +204,7 @@ CONTAINS
     TYPE(VARYING_STRING), INTENT(OUT) :: ERROR !<The error string
     !Local Variables
     TYPE(VARYING_STRING) :: LOCAL_ERROR
-    
+
     ENTERS("MultiPhysics_FiniteElementJacobianEvaluate",ERR,ERROR,*999)
 
     IF(ASSOCIATED(EQUATIONS_SET)) THEN
@@ -233,12 +233,12 @@ CONTAINS
     ELSE
       CALL FlagError("Equations set is not associated",ERR,ERROR,*999)
     ENDIF
-       
+
     EXITS("MultiPhysics_FiniteElementJacobianEvaluate")
     RETURN
 999 ERRORSEXITS("MultiPhysics_FiniteElementJacobianEvaluate",ERR,ERROR)
     RETURN 1
-    
+
   END SUBROUTINE MultiPhysics_FiniteElementJacobianEvaluate
 
   !
@@ -255,7 +255,7 @@ CONTAINS
     TYPE(VARYING_STRING), INTENT(OUT) :: ERROR !<The error string
     !Local Variables
     TYPE(VARYING_STRING) :: LOCAL_ERROR
-    
+
     ENTERS("MultiPhysics_FiniteElementResidualEvaluate",ERR,ERROR,*999)
 
     IF(ASSOCIATED(EQUATIONS_SET)) THEN
@@ -285,12 +285,12 @@ CONTAINS
     ELSE
       CALL FlagError("Equations set is not associated",ERR,ERROR,*999)
     ENDIF
-       
+
     EXITS("MultiPhysics_FiniteElementResidualEvaluate")
     RETURN
 999 ERRORSEXITS("MultiPhysics_FiniteElementResidualEvaluate",ERR,ERROR)
     RETURN 1
-    
+
   END SUBROUTINE MultiPhysics_FiniteElementResidualEvaluate
 
   !
@@ -307,7 +307,7 @@ CONTAINS
     TYPE(VARYING_STRING), INTENT(OUT) :: ERROR !<The error string
     !Local Variables
     TYPE(VARYING_STRING) :: LOCAL_ERROR
-    
+
     ENTERS("MULTI_PHYSICS_EQUATIONS_SET_SETUP",ERR,ERROR,*999)
 
     IF(ASSOCIATED(EQUATIONS_SET)) THEN
@@ -336,13 +336,13 @@ CONTAINS
     ELSE
       CALL FlagError("Equations set is not associated.",ERR,ERROR,*999)
     ENDIF
-       
+
     EXITS("MULTI_PHYSICS_EQUATIONS_SET_SETUP")
     RETURN
 999 ERRORSEXITS("MULTI_PHYSICS_EQUATIONS_SET_SETUP",ERR,ERROR)
     RETURN 1
   END SUBROUTINE MULTI_PHYSICS_EQUATIONS_SET_SETUP
-  
+
 
   !
   !================================================================================================================================
@@ -358,7 +358,7 @@ CONTAINS
     TYPE(VARYING_STRING), INTENT(OUT) :: ERROR !<The error string
     !Local Variables
     TYPE(VARYING_STRING) :: LOCAL_ERROR
-    
+
     ENTERS("MultiPhysics_EquationsSetSolnMethodSet",ERR,ERROR,*999)
 
     IF(ASSOCIATED(EQUATIONS_SET)) THEN
@@ -387,13 +387,13 @@ CONTAINS
     ELSE
       CALL FlagError("Equations set is not associated.",ERR,ERROR,*999)
     ENDIF
-       
+
     EXITS("MultiPhysics_EquationsSetSolnMethodSet")
     RETURN
 999 ERRORS("MultiPhysics_EquationsSetSolnMethodSet",ERR,ERROR)
     EXITS("MultiPhysics_EquationsSetSolnMethodSet")
     RETURN 1
-    
+
   END SUBROUTINE MultiPhysics_EquationsSetSolnMethodSet
 
   !
@@ -450,7 +450,7 @@ CONTAINS
 999 ERRORS("MultiPhysics_ProblemSpecificationSet",err,error)
     EXITS("MultiPhysics_ProblemSpecificationSet")
     RETURN 1
-    
+
   END SUBROUTINE MultiPhysics_ProblemSpecificationSet
 
   !
@@ -467,7 +467,7 @@ CONTAINS
     TYPE(VARYING_STRING), INTENT(OUT) :: ERROR !<The error string
     !Local Variables
     TYPE(VARYING_STRING) :: LOCAL_ERROR
-    
+
     ENTERS("MULTI_PHYSICS_PROBLEM_SETUP",ERR,ERROR,*999)
 
     IF(ASSOCIATED(PROBLEM)) THEN
@@ -482,7 +482,7 @@ CONTAINS
       CASE(PROBLEM_FINITE_ELASTICITY_FLUID_PRESSURE_TYPE)
         CALL ELASTICITY_FLUID_PRESSURE_PROBLEM_SETUP(PROBLEM,PROBLEM_SETUP,ERR,ERROR,*999)
       CASE(PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE)
-        CALL BIOELECTRIC_FINITE_ELASTICITY_PROBLEM_SETUP(PROBLEM,PROBLEM_SETUP,ERR,ERROR,*999) 
+        CALL BIOELECTRIC_FINITE_ELASTICITY_PROBLEM_SETUP(PROBLEM,PROBLEM_SETUP,ERR,ERROR,*999)
       CASE(PROBLEM_FINITE_ELASTICITY_STOKES_TYPE)
         CALL FlagError("Not implemented.",ERR,ERROR,*999)
       CASE(PROBLEM_FINITE_ELASTICITY_NAVIER_STOKES_TYPE)
@@ -502,7 +502,7 @@ CONTAINS
     ELSE
       CALL FlagError("Problem is not associated.",ERR,ERROR,*999)
     ENDIF
-       
+
     EXITS("MULTI_PHYSICS_PROBLEM_SETUP")
     RETURN
 999 ERRORSEXITS("MULTI_PHYSICS_PROBLEM_SETUP",ERR,ERROR)
@@ -523,7 +523,7 @@ CONTAINS
     TYPE(VARYING_STRING), INTENT(OUT) :: ERROR !<The error string
     !Local Variables
     TYPE(VARYING_STRING) :: LOCAL_ERROR
-    
+
     ENTERS("MULTI_PHYSICS_POST_SOLVE",ERR,ERROR,*999)
 
     IF(ASSOCIATED(CONTROL_LOOP%PROBLEM)) THEN
@@ -557,7 +557,7 @@ CONTAINS
     ELSE
       CALL FlagError("Problem is not associated.",ERR,ERROR,*999)
     ENDIF
-       
+
     EXITS("MULTI_PHYSICS_POST_SOLVE")
     RETURN
 999 ERRORSEXITS("MULTI_PHYSICS_POST_SOLVE",ERR,ERROR)
@@ -578,7 +578,7 @@ CONTAINS
     TYPE(VARYING_STRING), INTENT(OUT) :: ERROR !<The error string
     !Local Variables
     TYPE(VARYING_STRING) :: LOCAL_ERROR
-    
+
     ENTERS("MULTI_PHYSICS_PRE_SOLVE",ERR,ERROR,*999)
 
     IF(ASSOCIATED(CONTROL_LOOP%PROBLEM)) THEN
@@ -612,7 +612,7 @@ CONTAINS
     ELSE
       CALL FlagError("Problem is not associated.",ERR,ERROR,*999)
     ENDIF
-       
+
     EXITS("MULTI_PHYSICS_PRE_SOLVE")
     RETURN
 999 ERRORSEXITS("MULTI_PHYSICS_PRE_SOLVE",ERR,ERROR)
@@ -701,6 +701,7 @@ CONTAINS
       CASE(PROBLEM_FINITE_ELASTICITY_FLUID_PRESSURE_TYPE)
         !do nothing
       CASE(PROBLEM_BIOELECTRIC_FINITE_ELASTICITY_TYPE)
+        ! output *.exnode files with name e.g. MainTime_1_26.part0.exnode
         CALL BioelectricFiniteElasticity_ControlLoopPostLoop(CONTROL_LOOP,ERR,ERROR,*999)
       CASE(PROBLEM_FINITE_ELASTICITY_STOKES_TYPE)
         !do nothing

@@ -617,21 +617,21 @@ CONTAINS
                 ENDDO !loop_idx
               ENDIF
 
-              CALL CustomProfilingStart("1.1/2 post solve")
+              CALL CustomProfilingStart("1.1/2 post solve (file output)")
 
 #ifdef TAUPROF
-              CALL TAU_STATIC_PHASE_START('1.1/2 post solve')
+              CALL TAU_STATIC_PHASE_START('1.1/2 post solve (file output)')
 #endif
 
 
-              !Perform any post loop actions.
+              !Perform any post loop actions (e.g. file output)
               CALL PROBLEM_CONTROL_LOOP_POST_LOOP(CONTROL_LOOP,ERR,ERROR,*999)
 
 #ifdef TAUPROF
-              CALL TAU_STATIC_PHASE_STOP('1.1/2 post solve')
+              CALL TAU_STATIC_PHASE_STOP('1.1/2 post solve (file output)')
 #endif
 
-              CALL CustomProfilingStop("1.1/2 post solve")
+              CALL CustomProfilingStop("1.1/2 post solve (file output)")
 
               !Increment loop counter and time
               TIME_LOOP%ITERATION_NUMBER=TIME_LOOP%ITERATION_NUMBER+1
@@ -765,14 +765,14 @@ CONTAINS
                 ENDIF
 
 #ifdef TAUPROF
-                CALL TAU_STATIC_PHASE_START('1.3.4 post solve')
+                CALL TAU_STATIC_PHASE_START('1.3.4 post solve (file output)')
 #endif
-                CALL CustomProfilingStart("1.3.4 post solve")
+                CALL CustomProfilingStart("1.3.4 post solve (file output)")
                 CALL PROBLEM_CONTROL_LOOP_POST_LOOP(CONTROL_LOOP,ERR,ERROR,*999)
-                CALL CustomProfilingStop("1.3.4 post solve")
+                CALL CustomProfilingStop("1.3.4 post solve (file output)")
 
 #ifdef TAUPROF
-                CALL TAU_STATIC_PHASE_STOP('1.3.4 post solve')
+                CALL TAU_STATIC_PHASE_STOP('1.3.4 post solve (file output)')
 #endif
               ENDDO !while loop
             ENDIF
