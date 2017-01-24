@@ -410,13 +410,11 @@ MODULE OpenCMISS_Iron
 
   PUBLIC cmfe_SolverEquationsType,cmfe_SolverEquations_Finalise,cmfe_SolverEquations_Initialise
 
-#ifdef USE_CUSTOM_PROFILING
   PUBLIC cmfe_CustomProfilingStart,cmfe_CustomProfilingStop,cmfe_CustomProfilingMemory,cmfe_CustomProfilingGetInfo, &
     & cmfe_CustomProfilingGetDuration,cmfe_CustomProfilingGetMemory,cmfe_CustomProfilingGetSizePerElement, &
-#endif
-#ifdef USE_CUSTOM_PROFILING
-    & cmfe_CustomProfilingGetNumberObjects
-#endif
+    & cmfe_CustomProfilingGetNumberObjects, cmfe_CustomProfilingGetEnabled
+
+  PUBLIC cmfe_PrintProblemType
 
 !!==================================================================================================================================
 !!
@@ -61877,6 +61875,37 @@ CONTAINS
 
     cmfe_CustomProfilingGetNumberObjects = CustomProfilingGetNumberObjects(Identifier)
   END FUNCTION cmfe_CustomProfilingGetNumberObjects
+
+  !
+  !================================================================================================================================
+  !
+  SUBROUTINE cmfe_CustomProfilingGetEnabled(CustomProfilingEnabled, TauProfilingEnabled, Err)
+    INTEGER(INTG), INTENT(OUT) :: err !<The error code.
+    LOGICAL, INTENT(OUT) :: CustomProfilingEnabled !< If custom profiling is compiled in
+    LOGICAL, INTENT(OUT) :: TauProfilingEnabled !< If TAU profiling is compiled in
+
+#ifdef TAUPROF
+    TauProfilingEnabled = .TRUE.
+#else
+    TauProfilingEnabled = .FALSE.
+#endif
+
+#ifdef USE_CUSTOM_PROFILING
+    CustomProfilingEnabled = .TRUE.
+#else
+    CustomProfilingEnabled = .FALSE.
+#endif
+  END SUBROUTINE cmfe_CustomProfilingGetEnabled
+
+  !
+  !================================================================================================================================
+  !
+  SUBROUTINE cmfe_PrintProblemType(Problem, Err)
+    TYPE(cmfe_ProblemType), INTENT(IN) :: Problem !< A problem object to be printed
+    INTEGER(INTG), INTENT(OUT) :: Err !<The error code.
+
+    CALL Print_Problem_Type(Problem%Problem)
+  END SUBROUTINE cmfe_PrintProblemType
 
 
 END MODULE OpenCMISS_Iron

@@ -144,46 +144,57 @@ CONTAINS
     OPEN(UNIT=myComputationalNodeNumber, FILE=CHAR(FILENAME),STATUS='unknown')
     ! WRITING HEADER INFORMATION
     WRITE(myComputationalNodeNumber,*) 'Group name: Cell'
-    WRITE(INTG_STRING,'(I0)'),NumberOfOutputFields 
+    WRITE(INTG_STRING,'(I0)') NumberOfOutputFields 
+    WRITE(INTG_STRING,'(I0)') NumberOfOutputFields 
     WRITE(myComputationalNodeNumber,*) '#Fields=',TRIM(INTG_STRING)
 
     ValueIndex=1
-    WRITE(INTG_STRING,'(I0)'),NumberOfDimensions 
+    WRITE(INTG_STRING,'(I0)') NumberOfDimensions 
+    WRITE(INTG_STRING,'(I0)') NumberOfDimensions 
     WRITE(myComputationalNodeNumber,*) &
       & ' 1) coordinates,  coordinate, rectangular cartesian, #Components=',TRIM(INTG_STRING)
     DO I=1,NumberOfDimensions
       IF(I==1) THEN
-        WRITE(INTG_STRING,'(I0)'),ValueIndex 
+        WRITE(INTG_STRING,'(I0)') ValueIndex 
+        WRITE(INTG_STRING,'(I0)') ValueIndex 
         WRITE(myComputationalNodeNumber,*) '   x.  Value index= ',TRIM(INTG_STRING),', #Derivatives= 0'
       ELSE IF(I==2) THEN
-        WRITE(INTG_STRING,'(I0)'),ValueIndex 
+        WRITE(INTG_STRING,'(I0)') ValueIndex 
+        WRITE(INTG_STRING,'(I0)') ValueIndex 
         WRITE(myComputationalNodeNumber,*) '   y.  Value index= ',TRIM(INTG_STRING),', #Derivatives= 0'
       ELSE
-        WRITE(INTG_STRING,'(I0)'),ValueIndex 
+        WRITE(INTG_STRING,'(I0)') ValueIndex 
+        WRITE(INTG_STRING,'(I0)') ValueIndex 
         WRITE(myComputationalNodeNumber,*) '   z.  Value index= ',TRIM(INTG_STRING),', #Derivatives= 0'
       END IF
       ValueIndex=ValueIndex+1
     END DO
 
-    WRITE(INTG_STRING,'(I0)'),NumberOfVariableComponents 
+    WRITE(INTG_STRING,'(I0)') NumberOfVariableComponents 
+    WRITE(INTG_STRING,'(I0)') NumberOfVariableComponents 
     WRITE(myComputationalNodeNumber,*) ' 2) dependent, field, rectangular cartesian, #Components=', & 
       & TRIM(INTG_STRING)
 
     DO I=1,NumberOfVariableComponents
-      WRITE(INTG_STRING,'(I0)'),ValueIndex
-      WRITE(INTG_STRING2,'(I0)'),I 
+      WRITE(INTG_STRING,'(I0)') ValueIndex
+      WRITE(INTG_STRING,'(I0)') ValueIndex
+      WRITE(INTG_STRING2,'(I0)') I 
+      WRITE(INTG_STRING2,'(I0)') I 
       WRITE(myComputationalNodeNumber,*)  '  ',TRIM(INTG_STRING2),'. Value index= ',TRIM(INTG_STRING), & 
         & ', #Derivatives= 0' 
       ValueIndex=ValueIndex+1
     END DO
 
     IF( OUTPUT_SOURCE ) THEN !Watch out that no numbering conflict occurs with Analytic: 4.)
-      WRITE(INTG_STRING,'(I0)'),NumberOfSourceComponents 
+      WRITE(INTG_STRING,'(I0)') NumberOfSourceComponents 
+      WRITE(INTG_STRING,'(I0)') NumberOfSourceComponents 
       WRITE(myComputationalNodeNumber,*) ' 3) source, field, rectangular cartesian, #Components=', & 
         & TRIM(INTG_STRING)
       DO I=1,NumberOfSourceComponents
-        WRITE(INTG_STRING,'(I0)'),ValueIndex
-        WRITE(INTG_STRING2,'(I0)'),I 
+        WRITE(INTG_STRING,'(I0)') ValueIndex
+        WRITE(INTG_STRING,'(I0)') ValueIndex
+        WRITE(INTG_STRING2,'(I0)') I 
+        WRITE(INTG_STRING2,'(I0)') I 
         WRITE(myComputationalNodeNumber,*)  '   ',TRIM(INTG_STRING2),'.  Value index= ', & 
           & TRIM(INTG_STRING),', #Derivatives= 0' 
         ValueIndex=ValueIndex+1
@@ -248,38 +259,46 @@ CONTAINS
     OPEN(UNIT=myComputationalNodeNumber, FILE=CHAR(FILENAME),STATUS='unknown')
     WRITE(myComputationalNodeNumber,*) 'Group name: Cell'
     IF (BasisType==1) THEN !lagrange basis in 1 and 2D
-      WRITE(INTG_STRING,'(I0)'),NumberOfDimensions
+      WRITE(INTG_STRING,'(I0)') NumberOfDimensions
+      WRITE(INTG_STRING,'(I0)') NumberOfDimensions
       WRITE(myComputationalNodeNumber,*) 'Shape.  Dimension= ',TRIM(INTG_STRING)
       WRITE(myComputationalNodeNumber,*) '#Scale factor sets= 1'
       IF(NumberOfDimensions==1) THEN
-        WRITE(INTG_STRING,'(I0)'),MaxNodesPerElement
+        WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
+        WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
         WRITE(myComputationalNodeNumber,*) 'q.Lagrange, #Scale factors=',TRIM(INTG_STRING)
       ELSE IF (NumberOfDimensions==2) THEN
         IF(MaxNodesPerElement==4) THEN
 
-          WRITE(INTG_STRING,'(I0)'),MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
           WRITE(myComputationalNodeNumber,*) &
             & 'l.Lagrange*l.Lagrange, #Scale factors=',TRIM(INTG_STRING) !linear lagrange
         ELSE IF(MaxNodesPerElement==9) THEN
-          WRITE(INTG_STRING,'(I0)'),MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
           WRITE(myComputationalNodeNumber,*) &
             & 'q.Lagrange*q.Lagrange, #Scale factors=',TRIM(INTG_STRING) !quadratic lagrange
         ELSE IF(MaxNodesPerElement==16) THEN
-          WRITE(INTG_STRING,'(I0)'),MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
           WRITE(myComputationalNodeNumber,*) &
             & 'c.Lagrange*c.Lagrange, #Scale factors=',TRIM(INTG_STRING) !cubic lagrange
         END IF
       ELSE !three dimensions
         IF(MaxNodesPerElement==8) THEN
-          WRITE(INTG_STRING,'(I0)'),MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
           WRITE(myComputationalNodeNumber,*) &
             & 'l.Lagrange*l.Lagrange*l.Lagrange, #Scale factors=',TRIM(INTG_STRING)
         ELSE IF(MaxNodesPerElement==27) THEN
-          WRITE(INTG_STRING,'(I0)'),MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
           WRITE(myComputationalNodeNumber,*) &
             & 'q.Lagrange*q.Lagrange*q.Lagrange, #Scale factors=',TRIM(INTG_STRING)
         ELSE IF(MaxNodesPerElement==64) THEN
-          WRITE(INTG_STRING,'(I0)'),MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
           WRITE(myComputationalNodeNumber,*) &
             & 'c.Lagrange*c.Lagrange*c.Lagrange, #Scale factors=',TRIM(INTG_STRING)
         END IF
@@ -290,38 +309,45 @@ CONTAINS
           & NumberOfDimensions,', simplex(2)*simplex'
         IF(MaxNodesPerElement==3) THEN
           WRITE(myComputationalNodeNumber,*) '#Scale factor sets= 1'
-          WRITE(INTG_STRING,'(I0)'),MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
           WRITE(myComputationalNodeNumber,*)  & 
             & ' l.simplex(2)*l.simplex, #Scale factors= ', TRIM(INTG_STRING)
         ELSE IF(MaxNodesPerElement==6) THEN
           WRITE(myComputationalNodeNumber,*) '#Scale factor sets= 1'
-          WRITE(INTG_STRING,'(I0)'),MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
           WRITE(myComputationalNodeNumber,*) & 
             & ' l.simplex(2)*l.simplex, #Scale factors= ', TRIM(INTG_STRING)
         ELSE IF (MaxNodesPerElement== 10 ) THEN
           WRITE(myComputationalNodeNumber,*) '#Scale factor sets= 1'
-          WRITE(INTG_STRING,'(I0)'),MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
           WRITE(myComputationalNodeNumber,*) &
             & ' q.simplex(2)*q.simplex, #Scale factors= ', TRIM(INTG_STRING)
         ENDIF
       ELSE IF(NumberOfDimensions==3) THEN
-        WRITE(INTG_STRING2,'(I0)'),NumberOfDimensions
+        WRITE(INTG_STRING2,'(I0)') NumberOfDimensions
+        WRITE(INTG_STRING2,'(I0)') NumberOfDimensions
         WRITE(myComputationalNodeNumber,*) &
           & 'Shape.  Dimension=',TRIM(INTG_STRING2),', simplex(2;3)*simplex*simplex'
         IF(MaxNodesPerElement==4) THEN
           WRITE(myComputationalNodeNumber,*) &
             & '#Scale factor sets= 1'
-          WRITE(INTG_STRING,'(I0)'),MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
           WRITE(myComputationalNodeNumber,*) &
             & ' l.simplex(2;3)*l.simplex*l.simplex, #Scale factors= ', TRIM(INTG_STRING)
         ELSE IF (MaxNodesPerElement== 10 ) THEN
           WRITE(myComputationalNodeNumber,*) '#Scale factor sets= 1'
-          WRITE(INTG_STRING,'(I0)'),MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
           WRITE(myComputationalNodeNumber,*) &
             & ' q.simplex(2;3)*q.simplex*q.simplex, #Scale factors= ', TRIM(INTG_STRING)
         ELSE IF(MaxNodesPerElement==20) THEN
           WRITE(myComputationalNodeNumber,*) '#Scale factor sets= 1'
-          WRITE(INTG_STRING,'(I0)'),MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
+          WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
           WRITE(myComputationalNodeNumber,*) &
             & ' q.simplex(2;3)*q.simplex*q.simplex, #Scale factors= ', TRIM(INTG_STRING)
         ENDIF      
@@ -330,24 +356,29 @@ CONTAINS
       END IF
 
     END IF
-    WRITE(INTG_STRING,'(I0)'),MaxNodesPerElement
+    WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
+    WRITE(INTG_STRING,'(I0)') MaxNodesPerElement
     WRITE(myComputationalNodeNumber,*) '#Nodes= ',TRIM(INTG_STRING)
-    WRITE(INTG_STRING,'(I0)'),NumberOfOutputFields
+    WRITE(INTG_STRING,'(I0)') NumberOfOutputFields
+    WRITE(INTG_STRING,'(I0)') NumberOfOutputFields
     WRITE(myComputationalNodeNumber,*) '#Fields= ',TRIM(INTG_STRING)
     NumberOfFieldComponents(1) = NumberOfDimensions
     NumberOfFieldComponents(2) = NumberOfVariableComponents
     NumberOfFieldComponents(3) = NumberOfSourceComponents
     DO I=1,NumberOfOutputFields
       IF(I==1)THEN
-        WRITE(INTG_STRING,'(I0)'),NumberOfDimensions
+        WRITE(INTG_STRING,'(I0)') NumberOfDimensions
+        WRITE(INTG_STRING,'(I0)') NumberOfDimensions
         WRITE(myComputationalNodeNumber,*) & 
           & ' 1) coordinates,  coordinate, rectangular cartesian, #Components= ',TRIM(INTG_STRING)
       ELSE IF(I==2) THEN
-        WRITE(INTG_STRING,'(I0)'),NumberOfVariableComponents
+        WRITE(INTG_STRING,'(I0)') NumberOfVariableComponents
+        WRITE(INTG_STRING,'(I0)') NumberOfVariableComponents
         WRITE(myComputationalNodeNumber,*) &
         & ' 2) dependent,  field,  rectangular cartesian, #Components= ',TRIM(INTG_STRING)
       ELSE IF(I==3) THEN
-        WRITE(INTG_STRING,'(I0)'),NumberOfSourceComponents
+        WRITE(INTG_STRING,'(I0)') NumberOfSourceComponents
+        WRITE(INTG_STRING,'(I0)') NumberOfSourceComponents
         WRITE(myComputationalNodeNumber,*) &
           & ' 3) source,  field,  rectangular cartesian, #Components= ',TRIM(INTG_STRING)
       END IF
@@ -540,7 +571,8 @@ CONTAINS
         WRITE(myComputationalNodeNumber,*) '   #Nodes= ',TRIM(INTG_STRING)
  
         DO K = 1,MaxNodesPerElement
-          WRITE(INTG_STRING,'(I0)'),K
+          WRITE(INTG_STRING,'(I0)') K
+          WRITE(INTG_STRING,'(I0)') K
           WRITE(myComputationalNodeNumber,*) '    ',TRIM(INTG_STRING),'.  #Values=1'
           WRITE(myComputationalNodeNumber,*) '     Value indices:     1'
           WRITE(myComputationalNodeNumber,*) '     Scale factor indices:   ',TRIM(INTG_STRING)
@@ -563,7 +595,8 @@ CONTAINS
     DO K=1,NumberOfElements
       ELEMENT_GLOBAL_NUMBER=COMPUTATIONAL_DOMAIN%DECOMPOSITION%TOPOLOGY%ELEMENTS%ELEMENTS(K)%GLOBAL_NUMBER 
       IF (BasisType==1) THEN
-        WRITE(INTG_STRING,'(I0)'),ELEMENT_GLOBAL_NUMBER
+        WRITE(INTG_STRING,'(I0)') ELEMENT_GLOBAL_NUMBER
+        WRITE(INTG_STRING,'(I0)') ELEMENT_GLOBAL_NUMBER
         WRITE(myComputationalNodeNumber,*) 'Element:     ', TRIM(INTG_STRING),' 0  0'
         WRITE(myComputationalNodeNumber,*) '   Nodes:'
         WRITE(myComputationalNodeNumber,*) '   ', ElementNodes(K,1:MaxNodesPerElement)

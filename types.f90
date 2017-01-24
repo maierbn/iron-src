@@ -3340,7 +3340,1557 @@ END TYPE GENERATED_MESH_ELLIPSOID_TYPE
         
    RETURN
  END SUBROUTINE Print_equations_type
- 
+
+!
+!================================================================================================================================
+!
+SUBROUTINE Print_Problem_type(Problem)
+  TYPE(PROBLEM_TYPE), POINTER, INTENT(IN) :: Problem
+  LOGICAL :: IsAllocated
+  LOGICAL :: IsAssociated
+  INTEGER(INTG) :: Dimension
+  INTEGER(INTG) :: I, I1, I2
+  
+  CHARACTER(LEN=16) :: I_STR, I1_STR, I2_STR
+  ! Method created automatically by create_fortran_problem_output.py
+  
+  ! depth 0
+  ! types_stack: []
+  ! case pointer
+  IsAssociated = ASSOCIATED(Problem)
+  IF (IsAssociated) THEN 
+    WRITE(*,'(A)') &
+      & " TYPE(PROBLEM_TYPE), POINTER :: " // &
+      & "Problem " // &
+      & "(associated): " 
+  
+! type [PROBLEM_TYPE] has inner types [['INTEGER(INTG)', 'USER_NUMBER'], ['INTEGER(INTG)', 'GLOBAL_NUMBER'], ['LOGICAL', 'PROBLEM_FINISHED'], ['TYPE(PROBLEMS_TYPE), POINTER', 'PROBLEMS'], ['INTEGER(INTG), ALLOCATABLE', 'SPECIFICATION(:)'], ['TYPE(CONTROL_LOOP_TYPE), POINTER', 'CONTROL_LOOP']]
+    ! depth 1
+    ! types_stack: ['PROBLEM_TYPE']
+    PRINT*, " INTEGER(INTG) :: " // &
+      & "Problem%USER_NUMBER: ", &
+      & Problem%USER_NUMBER
+    ! depth 1
+    ! types_stack: ['PROBLEM_TYPE']
+    PRINT*, " INTEGER(INTG) :: " // &
+      & "Problem%GLOBAL_NUMBER: ", &
+      & Problem%GLOBAL_NUMBER
+    ! depth 1
+    ! types_stack: ['PROBLEM_TYPE']
+    PRINT*, " LOGICAL :: " // &
+      & "Problem%PROBLEM_FINISHED: ", &
+      & Problem%PROBLEM_FINISHED
+    ! depth 1
+    ! types_stack: ['PROBLEM_TYPE']
+    ! case pointer
+    IsAssociated = ASSOCIATED(Problem%PROBLEMS)
+    IF (IsAssociated) THEN 
+      WRITE(*,'(A)') &
+        & "  TYPE(PROBLEMS_TYPE), POINTER :: " // &
+        & "Problem%PROBLEMS " // &
+        & "(associated): " 
+    
+! type [PROBLEMS_TYPE] has inner types [['INTEGER(INTG)', 'NUMBER_OF_PROBLEMS'], ['TYPE(PROBLEM_PTR_TYPE), POINTER', 'PROBLEMS(:)']]
+      ! depth 2
+      ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE']
+      PRINT*, "  INTEGER(INTG) :: " // &
+        & "Problem%PROBLEMS%NUMBER_OF_PROBLEMS: ", &
+        & Problem%PROBLEMS%NUMBER_OF_PROBLEMS
+      ! depth 2
+      ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE']
+      ! case pointer, array
+      IsAssociated = ASSOCIATED(Problem%PROBLEMS%PROBLEMS)
+      IF (IsAssociated) THEN 
+        WRITE(*,'(A,I3,A)') &
+          & "   TYPE(PROBLEM_PTR_TYPE), POINTER :: " // &
+          & "Problem%PROBLEMS%PROBLEMS(:) " // &
+          & "(associated, size=", &
+          & SIZE(Problem%PROBLEMS%PROBLEMS,1), "): "
+      
+! type [PROBLEM_PTR_TYPE] has inner types [['TYPE(PROBLEM_TYPE), POINTER', 'PTR']]
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE']
+        ! case pointer
+        IsAssociated = ASSOCIATED(Problem%PROBLEMS%PROBLEMS(1)%PTR)
+        IF (IsAssociated) THEN 
+          WRITE(*,'(A)') &
+            & "    TYPE(PROBLEM_TYPE), POINTER :: " // &
+            & "Problem%PROBLEMS%PROBLEMS(1)%PTR " // &
+            & "(associated) " // &
+            & "(not followed because it could be an infinite loop to base problem)" 
+        ELSE
+          PRINT*, "   TYPE(PROBLEM_TYPE), POINTER :: " // &
+            & "Problem%PROBLEMS%PROBLEMS(1)%PTR (NULL)"
+        ENDIF ! If (IsAssociated)
+      ELSE
+        PRINT*, "  TYPE(PROBLEM_PTR_TYPE), POINTER :: " // &
+          & "Problem%PROBLEMS%PROBLEMS(:) (NULL)"
+      ENDIF ! If (IsAssociated)
+    ELSE
+      PRINT*, " TYPE(PROBLEMS_TYPE), POINTER :: " // &
+        & "Problem%PROBLEMS (NULL)"
+    ENDIF ! If (IsAssociated)
+    ! depth 1
+    ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE']
+    ! case allocatable
+    IsAllocated = ALLOCATED(Problem%SPECIFICATION)
+    IF (IsAllocated) THEN 
+      Dimension = SIZE(SHAPE(Problem%SPECIFICATION),1)
+      WRITE(*,'(A,I2,A)',advance='no') &
+        & "  INTEGER(INTG), ALLOCATABLE :: " // &
+        & "Problem%SPECIFICATION(:) " // &
+        & "(allocated, dim=", Dimension, ", size="
+
+      ! loop over dimensions
+      DO I = 1,Dimension
+        WRITE(*,'(I5)',advance='no') &
+          & SIZE(Problem%SPECIFICATION, I)
+        IF (I /= Dimension) WRITE(*,'(A)',advance='no') " x "
+      ENDDO
+      WRITE(*,'(A)',advance='no') "): " // NEW_LINE('A')
+      WRITE(*, *) Problem%SPECIFICATION
+    ELSE
+      PRINT*, " INTEGER(INTG), ALLOCATABLE :: " // &
+        & "Problem%SPECIFICATION(:) (not allocated)"
+    ENDIF ! IF (IsAllocated)
+    ! depth 1
+    ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE']
+    ! case pointer
+    IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP)
+    IF (IsAssociated) THEN 
+      WRITE(*,'(A)') &
+        & "  TYPE(CONTROL_LOOP_TYPE), POINTER :: " // &
+        & "Problem%CONTROL_LOOP " // &
+        & "(associated): " 
+    
+! type [CONTROL_LOOP_TYPE] has inner types [['TYPE(PROBLEM_TYPE), POINTER', 'PROBLEM'], ['TYPE(CONTROL_LOOP_TYPE), POINTER', 'PARENT_LOOP'], ['LOGICAL', 'CONTROL_LOOP_FINISHED'], ['TYPE(VARYING_STRING)', 'LABEL'], ['INTEGER(INTG)', 'LOOP_TYPE'], ['INTEGER(INTG)', 'CONTROL_LOOP_LEVEL'], ['INTEGER(INTG)', 'SUB_LOOP_INDEX'], ['INTEGER(INTG)', 'OUTPUT_TYPE'], ['TYPE(CONTROL_LOOP_SIMPLE_TYPE), POINTER', 'SIMPLE_LOOP'], ['TYPE(CONTROL_LOOP_FIXED_TYPE), POINTER', 'FIXED_LOOP'], ['TYPE(CONTROL_LOOP_TIME_TYPE), POINTER', 'TIME_LOOP'], ['TYPE(CONTROL_LOOP_WHILE_TYPE), POINTER', 'WHILE_LOOP'], ['TYPE(CONTROL_LOOP_LOAD_INCREMENT_TYPE), POINTER', 'LOAD_INCREMENT_LOOP'], ['INTEGER(INTG)', 'NUMBER_OF_SUB_LOOPS'], ['TYPE(CONTROL_LOOP_PTR_TYPE), ALLOCATABLE', 'SUB_LOOPS(:)'], ['TYPE(SOLVERS_TYPE), POINTER', 'SOLVERS'], ['TYPE(HISTORY_TYPE), POINTER', 'HISTORY']]
+      ! depth 2
+      ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE']
+      ! case pointer
+      IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%PROBLEM)
+      IF (IsAssociated) THEN 
+        WRITE(*,'(A)') &
+          & "   TYPE(PROBLEM_TYPE), POINTER :: " // &
+          & "Problem%CONTROL_LOOP%PROBLEM " // &
+          & "(associated) " // &
+          & "(not followed because it could be an infinite loop to base problem)" 
+      ELSE
+        PRINT*, "  TYPE(PROBLEM_TYPE), POINTER :: " // &
+          & "Problem%CONTROL_LOOP%PROBLEM (NULL)"
+      ENDIF ! If (IsAssociated)
+      ! depth 2
+      ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE']
+      ! case pointer
+      IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%PARENT_LOOP)
+      IF (IsAssociated) THEN 
+        WRITE(*,'(A)') &
+          & "   TYPE(CONTROL_LOOP_TYPE), POINTER :: " // &
+          & "Problem%CONTROL_LOOP%PARENT_LOOP " // &
+          & "(associated): " 
+        PRINT*, "Type already exists and may be a loop!"
+      ELSE
+        PRINT*, "  TYPE(CONTROL_LOOP_TYPE), POINTER :: " // &
+          & "Problem%CONTROL_LOOP%PARENT_LOOP (NULL)"
+      ENDIF ! If (IsAssociated)
+      ! depth 2
+      ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE']
+      PRINT*, "  LOGICAL :: " // &
+        & "Problem%CONTROL_LOOP%CONTROL_LOOP_FINISHED: ", &
+        & Problem%CONTROL_LOOP%CONTROL_LOOP_FINISHED
+      ! depth 2
+      ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE']
+      ! depth 2
+      ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE']
+      PRINT*, "  INTEGER(INTG) :: " // &
+        & "Problem%CONTROL_LOOP%LOOP_TYPE: ", &
+        & Problem%CONTROL_LOOP%LOOP_TYPE
+      ! depth 2
+      ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE']
+      PRINT*, "  INTEGER(INTG) :: " // &
+        & "Problem%CONTROL_LOOP%CONTROL_LOOP_LEVEL: ", &
+        & Problem%CONTROL_LOOP%CONTROL_LOOP_LEVEL
+      ! depth 2
+      ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE']
+      PRINT*, "  INTEGER(INTG) :: " // &
+        & "Problem%CONTROL_LOOP%SUB_LOOP_INDEX: ", &
+        & Problem%CONTROL_LOOP%SUB_LOOP_INDEX
+      ! depth 2
+      ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE']
+      PRINT*, "  INTEGER(INTG) :: " // &
+        & "Problem%CONTROL_LOOP%OUTPUT_TYPE: ", &
+        & Problem%CONTROL_LOOP%OUTPUT_TYPE
+      ! depth 2
+      ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE']
+      ! case pointer
+      IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SIMPLE_LOOP)
+      IF (IsAssociated) THEN 
+        WRITE(*,'(A)') &
+          & "   TYPE(CONTROL_LOOP_SIMPLE_TYPE), POINTER :: " // &
+          & "Problem%CONTROL_LOOP%SIMPLE_LOOP " // &
+          & "(associated): " 
+      
+! type [CONTROL_LOOP_SIMPLE_TYPE] has inner types [['TYPE(CONTROL_LOOP_TYPE), POINTER', 'CONTROL_LOOP']]
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE']
+        ! case pointer
+        IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SIMPLE_LOOP%CONTROL_LOOP)
+        IF (IsAssociated) THEN 
+          WRITE(*,'(A)') &
+            & "    TYPE(CONTROL_LOOP_TYPE), POINTER :: " // &
+            & "Problem%CONTROL_LOOP%SIMPLE_LOOP%CONTROL_LOOP " // &
+            & "(associated): " 
+          PRINT*, "Type already exists and may be a loop!"
+        ELSE
+          PRINT*, "   TYPE(CONTROL_LOOP_TYPE), POINTER :: " // &
+            & "Problem%CONTROL_LOOP%SIMPLE_LOOP%CONTROL_LOOP (NULL)"
+        ENDIF ! If (IsAssociated)
+      ELSE
+        PRINT*, "  TYPE(CONTROL_LOOP_SIMPLE_TYPE), POINTER :: " // &
+          & "Problem%CONTROL_LOOP%SIMPLE_LOOP (NULL)"
+      ENDIF ! If (IsAssociated)
+      ! depth 2
+      ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE']
+      ! case pointer
+      IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%FIXED_LOOP)
+      IF (IsAssociated) THEN 
+        WRITE(*,'(A)') &
+          & "   TYPE(CONTROL_LOOP_FIXED_TYPE), POINTER :: " // &
+          & "Problem%CONTROL_LOOP%FIXED_LOOP " // &
+          & "(associated): " 
+      
+! type [CONTROL_LOOP_FIXED_TYPE] has inner types [['TYPE(CONTROL_LOOP_TYPE), POINTER', 'CONTROL_LOOP'], ['INTEGER(INTG)', 'ITERATION_NUMBER'], ['INTEGER(INTG)', 'START_ITERATION'], ['INTEGER(INTG)', 'STOP_ITERATION'], ['INTEGER(INTG)', 'ITERATION_INCREMENT']]
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE']
+        ! case pointer
+        IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%FIXED_LOOP%CONTROL_LOOP)
+        IF (IsAssociated) THEN 
+          WRITE(*,'(A)') &
+            & "    TYPE(CONTROL_LOOP_TYPE), POINTER :: " // &
+            & "Problem%CONTROL_LOOP%FIXED_LOOP%CONTROL_LOOP " // &
+            & "(associated): " 
+          PRINT*, "Type already exists and may be a loop!"
+        ELSE
+          PRINT*, "   TYPE(CONTROL_LOOP_TYPE), POINTER :: " // &
+            & "Problem%CONTROL_LOOP%FIXED_LOOP%CONTROL_LOOP (NULL)"
+        ENDIF ! If (IsAssociated)
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE']
+        PRINT*, "   INTEGER(INTG) :: " // &
+          & "Problem%CONTROL_LOOP%FIXED_LOOP%ITERATION_NUMBER: ", &
+          & Problem%CONTROL_LOOP%FIXED_LOOP%ITERATION_NUMBER
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE']
+        PRINT*, "   INTEGER(INTG) :: " // &
+          & "Problem%CONTROL_LOOP%FIXED_LOOP%START_ITERATION: ", &
+          & Problem%CONTROL_LOOP%FIXED_LOOP%START_ITERATION
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE']
+        PRINT*, "   INTEGER(INTG) :: " // &
+          & "Problem%CONTROL_LOOP%FIXED_LOOP%STOP_ITERATION: ", &
+          & Problem%CONTROL_LOOP%FIXED_LOOP%STOP_ITERATION
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE']
+        PRINT*, "   INTEGER(INTG) :: " // &
+          & "Problem%CONTROL_LOOP%FIXED_LOOP%ITERATION_INCREMENT: ", &
+          & Problem%CONTROL_LOOP%FIXED_LOOP%ITERATION_INCREMENT
+      ELSE
+        PRINT*, "  TYPE(CONTROL_LOOP_FIXED_TYPE), POINTER :: " // &
+          & "Problem%CONTROL_LOOP%FIXED_LOOP (NULL)"
+      ENDIF ! If (IsAssociated)
+      ! depth 2
+      ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE']
+      ! case pointer
+      IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%TIME_LOOP)
+      IF (IsAssociated) THEN 
+        WRITE(*,'(A)') &
+          & "   TYPE(CONTROL_LOOP_TIME_TYPE), POINTER :: " // &
+          & "Problem%CONTROL_LOOP%TIME_LOOP " // &
+          & "(associated): " 
+      
+! type [CONTROL_LOOP_TIME_TYPE] has inner types [['TYPE(CONTROL_LOOP_TYPE), POINTER', 'CONTROL_LOOP'], ['INTEGER(INTG)', 'ITERATION_NUMBER'], ['INTEGER(INTG)', 'GLOBAL_ITERATION_NUMBER'], ['INTEGER(INTG)', 'OUTPUT_NUMBER'], ['INTEGER(INTG)', 'INPUT_NUMBER'], ['REAL(DP)', 'CURRENT_TIME'], ['REAL(DP)', 'START_TIME'], ['REAL(DP)', 'STOP_TIME'], ['REAL(DP)', 'TIME_INCREMENT']]
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE']
+        ! case pointer
+        IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%TIME_LOOP%CONTROL_LOOP)
+        IF (IsAssociated) THEN 
+          WRITE(*,'(A)') &
+            & "    TYPE(CONTROL_LOOP_TYPE), POINTER :: " // &
+            & "Problem%CONTROL_LOOP%TIME_LOOP%CONTROL_LOOP " // &
+            & "(associated): " 
+          PRINT*, "Type already exists and may be a loop!"
+        ELSE
+          PRINT*, "   TYPE(CONTROL_LOOP_TYPE), POINTER :: " // &
+            & "Problem%CONTROL_LOOP%TIME_LOOP%CONTROL_LOOP (NULL)"
+        ENDIF ! If (IsAssociated)
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE']
+        PRINT*, "   INTEGER(INTG) :: " // &
+          & "Problem%CONTROL_LOOP%TIME_LOOP%ITERATION_NUMBER: ", &
+          & Problem%CONTROL_LOOP%TIME_LOOP%ITERATION_NUMBER
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE']
+        PRINT*, "   INTEGER(INTG) :: " // &
+          & "Problem%CONTROL_LOOP%TIME_LOOP%GLOBAL_ITERATION_NUMBER: ", &
+          & Problem%CONTROL_LOOP%TIME_LOOP%GLOBAL_ITERATION_NUMBER
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE']
+        PRINT*, "   INTEGER(INTG) :: " // &
+          & "Problem%CONTROL_LOOP%TIME_LOOP%OUTPUT_NUMBER: ", &
+          & Problem%CONTROL_LOOP%TIME_LOOP%OUTPUT_NUMBER
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE']
+        PRINT*, "   INTEGER(INTG) :: " // &
+          & "Problem%CONTROL_LOOP%TIME_LOOP%INPUT_NUMBER: ", &
+          & Problem%CONTROL_LOOP%TIME_LOOP%INPUT_NUMBER
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE']
+        PRINT*, "   REAL(DP) :: " // &
+          & "Problem%CONTROL_LOOP%TIME_LOOP%CURRENT_TIME: ", &
+          & Problem%CONTROL_LOOP%TIME_LOOP%CURRENT_TIME
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE']
+        PRINT*, "   REAL(DP) :: " // &
+          & "Problem%CONTROL_LOOP%TIME_LOOP%START_TIME: ", &
+          & Problem%CONTROL_LOOP%TIME_LOOP%START_TIME
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE']
+        PRINT*, "   REAL(DP) :: " // &
+          & "Problem%CONTROL_LOOP%TIME_LOOP%STOP_TIME: ", &
+          & Problem%CONTROL_LOOP%TIME_LOOP%STOP_TIME
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE']
+        PRINT*, "   REAL(DP) :: " // &
+          & "Problem%CONTROL_LOOP%TIME_LOOP%TIME_INCREMENT: ", &
+          & Problem%CONTROL_LOOP%TIME_LOOP%TIME_INCREMENT
+      ELSE
+        PRINT*, "  TYPE(CONTROL_LOOP_TIME_TYPE), POINTER :: " // &
+          & "Problem%CONTROL_LOOP%TIME_LOOP (NULL)"
+      ENDIF ! If (IsAssociated)
+      ! depth 2
+      ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE']
+      ! case pointer
+      IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%WHILE_LOOP)
+      IF (IsAssociated) THEN 
+        WRITE(*,'(A)') &
+          & "   TYPE(CONTROL_LOOP_WHILE_TYPE), POINTER :: " // &
+          & "Problem%CONTROL_LOOP%WHILE_LOOP " // &
+          & "(associated): " 
+      
+! type [CONTROL_LOOP_WHILE_TYPE] has inner types [['TYPE(CONTROL_LOOP_TYPE), POINTER', 'CONTROL_LOOP'], ['INTEGER(INTG)', 'ITERATION_NUMBER'], ['INTEGER(INTG)', 'MAXIMUM_NUMBER_OF_ITERATIONS'], ['REAL(DP)', 'ABSOLUTE_TOLERANCE'], ['LOGICAL', 'CONTINUE_LOOP']]
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE']
+        ! case pointer
+        IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%WHILE_LOOP%CONTROL_LOOP)
+        IF (IsAssociated) THEN 
+          WRITE(*,'(A)') &
+            & "    TYPE(CONTROL_LOOP_TYPE), POINTER :: " // &
+            & "Problem%CONTROL_LOOP%WHILE_LOOP%CONTROL_LOOP " // &
+            & "(associated): " 
+          PRINT*, "Type already exists and may be a loop!"
+        ELSE
+          PRINT*, "   TYPE(CONTROL_LOOP_TYPE), POINTER :: " // &
+            & "Problem%CONTROL_LOOP%WHILE_LOOP%CONTROL_LOOP (NULL)"
+        ENDIF ! If (IsAssociated)
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE']
+        PRINT*, "   INTEGER(INTG) :: " // &
+          & "Problem%CONTROL_LOOP%WHILE_LOOP%ITERATION_NUMBER: ", &
+          & Problem%CONTROL_LOOP%WHILE_LOOP%ITERATION_NUMBER
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE']
+        PRINT*, "   INTEGER(INTG) :: " // &
+          & "Problem%CONTROL_LOOP%WHILE_LOOP%MAXIMUM_NUMBER_OF_ITERATIONS: ", &
+          & Problem%CONTROL_LOOP%WHILE_LOOP%MAXIMUM_NUMBER_OF_ITERATIONS
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE']
+        PRINT*, "   REAL(DP) :: " // &
+          & "Problem%CONTROL_LOOP%WHILE_LOOP%ABSOLUTE_TOLERANCE: ", &
+          & Problem%CONTROL_LOOP%WHILE_LOOP%ABSOLUTE_TOLERANCE
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE']
+        PRINT*, "   LOGICAL :: " // &
+          & "Problem%CONTROL_LOOP%WHILE_LOOP%CONTINUE_LOOP: ", &
+          & Problem%CONTROL_LOOP%WHILE_LOOP%CONTINUE_LOOP
+      ELSE
+        PRINT*, "  TYPE(CONTROL_LOOP_WHILE_TYPE), POINTER :: " // &
+          & "Problem%CONTROL_LOOP%WHILE_LOOP (NULL)"
+      ENDIF ! If (IsAssociated)
+      ! depth 2
+      ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE']
+      ! case pointer
+      IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%LOAD_INCREMENT_LOOP)
+      IF (IsAssociated) THEN 
+        WRITE(*,'(A)') &
+          & "   TYPE(CONTROL_LOOP_LOAD_INCREMENT_TYPE), POINTER :: " // &
+          & "Problem%CONTROL_LOOP%LOAD_INCREMENT_LOOP " // &
+          & "(associated): " 
+      
+! type [CONTROL_LOOP_LOAD_INCREMENT_TYPE] has inner types [['TYPE(CONTROL_LOOP_TYPE), POINTER', 'CONTROL_LOOP'], ['INTEGER(INTG)', 'ITERATION_NUMBER'], ['INTEGER(INTG)', 'MAXIMUM_NUMBER_OF_ITERATIONS'], ['INTEGER(INTG)', 'OUTPUT_NUMBER']]
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE']
+        ! case pointer
+        IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%LOAD_INCREMENT_LOOP%CONTROL_LOOP)
+        IF (IsAssociated) THEN 
+          WRITE(*,'(A)') &
+            & "    TYPE(CONTROL_LOOP_TYPE), POINTER :: " // &
+            & "Problem%CONTROL_LOOP%LOAD_INCREMENT_LOOP%CONTROL_LOOP " // &
+            & "(associated): " 
+          PRINT*, "Type already exists and may be a loop!"
+        ELSE
+          PRINT*, "   TYPE(CONTROL_LOOP_TYPE), POINTER :: " // &
+            & "Problem%CONTROL_LOOP%LOAD_INCREMENT_LOOP%CONTROL_LOOP (NULL)"
+        ENDIF ! If (IsAssociated)
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE']
+        PRINT*, "   INTEGER(INTG) :: " // &
+          & "Problem%CONTROL_LOOP%LOAD_INCREMENT_LOOP%ITERATION_NUMBER: ", &
+          & Problem%CONTROL_LOOP%LOAD_INCREMENT_LOOP%ITERATION_NUMBER
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE']
+        PRINT*, "   INTEGER(INTG) :: " // &
+          & "Problem%CONTROL_LOOP%LOAD_INCREMENT_LOOP%MAXIMUM_NUMBER_OF_ITERATIONS: ", &
+          & Problem%CONTROL_LOOP%LOAD_INCREMENT_LOOP%MAXIMUM_NUMBER_OF_ITERATIONS
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE']
+        PRINT*, "   INTEGER(INTG) :: " // &
+          & "Problem%CONTROL_LOOP%LOAD_INCREMENT_LOOP%OUTPUT_NUMBER: ", &
+          & Problem%CONTROL_LOOP%LOAD_INCREMENT_LOOP%OUTPUT_NUMBER
+      ELSE
+        PRINT*, "  TYPE(CONTROL_LOOP_LOAD_INCREMENT_TYPE), POINTER :: " // &
+          & "Problem%CONTROL_LOOP%LOAD_INCREMENT_LOOP (NULL)"
+      ENDIF ! If (IsAssociated)
+      ! depth 2
+      ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE']
+      PRINT*, "  INTEGER(INTG) :: " // &
+        & "Problem%CONTROL_LOOP%NUMBER_OF_SUB_LOOPS: ", &
+        & Problem%CONTROL_LOOP%NUMBER_OF_SUB_LOOPS
+      ! depth 2
+      ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE']
+      ! case allocatable
+      IsAllocated = ALLOCATED(Problem%CONTROL_LOOP%SUB_LOOPS)
+      IF (IsAllocated) THEN 
+        Dimension = SIZE(SHAPE(Problem%CONTROL_LOOP%SUB_LOOPS),1)
+        WRITE(*,'(A,I2,A)',advance='no') &
+          & "   TYPE(CONTROL_LOOP_PTR_TYPE), ALLOCATABLE :: " // &
+          & "Problem%CONTROL_LOOP%SUB_LOOPS(:) " // &
+          & "(allocated, dim=", Dimension, ", size="
+
+        ! loop over dimensions
+        DO I = 1,Dimension
+          WRITE(*,'(I5)',advance='no') &
+            & SIZE(Problem%CONTROL_LOOP%SUB_LOOPS, I)
+          IF (I /= Dimension) WRITE(*,'(A)',advance='no') " x "
+        ENDDO
+        WRITE(*,'(A)',advance='no') "): " // NEW_LINE('A')
+      
+! type [CONTROL_LOOP_PTR_TYPE] has inner types [['TYPE(CONTROL_LOOP_TYPE), POINTER', 'PTR']]
+        DO I1 = 1, SIZE(Problem%CONTROL_LOOP%SUB_LOOPS, 1)
+          WRITE(I1_STR,"(I2)") I1 
+          ! depth 3
+          ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE']
+          ! case pointer
+          IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SUB_LOOPS(I1)%PTR)
+          IF (IsAssociated) THEN 
+            WRITE(*,'(A)') &
+              & "    TYPE(CONTROL_LOOP_TYPE), POINTER :: " // &
+              & "Problem%CONTROL_LOOP%SUB_LOOPS("//I1_STR//")%PTR " // &
+              & "(associated): " 
+            PRINT*, "Type already exists and may be a loop!"
+          ELSE
+            PRINT*, "   TYPE(CONTROL_LOOP_TYPE), POINTER :: " // &
+              & "Problem%CONTROL_LOOP%SUB_LOOPS("//I1_STR//")%PTR (NULL)"
+          ENDIF ! If (IsAssociated)
+        ENDDO  ! I1
+      ELSE
+        PRINT*, "  TYPE(CONTROL_LOOP_PTR_TYPE), ALLOCATABLE :: " // &
+          & "Problem%CONTROL_LOOP%SUB_LOOPS(:) (not allocated)"
+      ENDIF ! IF (IsAllocated)
+      ! depth 2
+      ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE']
+      ! case pointer
+      IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS)
+      IF (IsAssociated) THEN 
+        WRITE(*,'(A)') &
+          & "   TYPE(SOLVERS_TYPE), POINTER :: " // &
+          & "Problem%CONTROL_LOOP%SOLVERS " // &
+          & "(associated): " 
+      
+! type [SOLVERS_TYPE] has inner types [['TYPE(CONTROL_LOOP_TYPE), POINTER', 'CONTROL_LOOP'], ['LOGICAL', 'SOLVERS_FINISHED'], ['INTEGER(INTG)', 'NUMBER_OF_SOLVERS'], ['TYPE(SOLVER_PTR_TYPE), ALLOCATABLE', 'SOLVERS(:)']]
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE']
+        ! case pointer
+        IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%CONTROL_LOOP)
+        IF (IsAssociated) THEN 
+          WRITE(*,'(A)') &
+            & "    TYPE(CONTROL_LOOP_TYPE), POINTER :: " // &
+            & "Problem%CONTROL_LOOP%SOLVERS%CONTROL_LOOP " // &
+            & "(associated): " 
+          PRINT*, "Type already exists and may be a loop!"
+        ELSE
+          PRINT*, "   TYPE(CONTROL_LOOP_TYPE), POINTER :: " // &
+            & "Problem%CONTROL_LOOP%SOLVERS%CONTROL_LOOP (NULL)"
+        ENDIF ! If (IsAssociated)
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE']
+        PRINT*, "   LOGICAL :: " // &
+          & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS_FINISHED: ", &
+          & Problem%CONTROL_LOOP%SOLVERS%SOLVERS_FINISHED
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE']
+        PRINT*, "   INTEGER(INTG) :: " // &
+          & "Problem%CONTROL_LOOP%SOLVERS%NUMBER_OF_SOLVERS: ", &
+          & Problem%CONTROL_LOOP%SOLVERS%NUMBER_OF_SOLVERS
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE']
+        ! case allocatable
+        IsAllocated = ALLOCATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS)
+        IF (IsAllocated) THEN 
+          Dimension = SIZE(SHAPE(Problem%CONTROL_LOOP%SOLVERS%SOLVERS),1)
+          WRITE(*,'(A,I2,A)',advance='no') &
+            & "    TYPE(SOLVER_PTR_TYPE), ALLOCATABLE :: " // &
+            & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS(:) " // &
+            & "(allocated, dim=", Dimension, ", size="
+
+          ! loop over dimensions
+          DO I = 1,Dimension
+            WRITE(*,'(I5)',advance='no') &
+              & SIZE(Problem%CONTROL_LOOP%SOLVERS%SOLVERS, I)
+            IF (I /= Dimension) WRITE(*,'(A)',advance='no') " x "
+          ENDDO
+          WRITE(*,'(A)',advance='no') "): " // NEW_LINE('A')
+        
+! type [SOLVER_PTR_TYPE] has inner types [['TYPE(SOLVER_TYPE), POINTER', 'PTR']]
+          DO I2 = 1, SIZE(Problem%CONTROL_LOOP%SOLVERS%SOLVERS, 1)
+            WRITE(I2_STR,"(I2)") I2 
+            ! depth 4
+            ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE']
+            ! case pointer
+            IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR)
+            IF (IsAssociated) THEN 
+              WRITE(*,'(A)') &
+                & "     TYPE(SOLVER_TYPE), POINTER :: " // &
+                & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR " // &
+                & "(associated): " 
+            
+! type [SOLVER_TYPE] has inner types [['TYPE(SOLVERS_TYPE), POINTER', 'SOLVERS'], ['INTEGER(INTG)', 'GLOBAL_NUMBER'], ['TYPE(SOLVER_TYPE), POINTER', 'LINKING_SOLVER'], ['INTEGER(INTG)', 'NUMBER_OF_LINKED_SOLVERS'], ['TYPE(SOLVER_PTR_TYPE), ALLOCATABLE', 'LINKED_SOLVERS(:)'], ['TYPE(SOLVER_PTR_TYPE), ALLOCATABLE', 'LINKED_SOLVER_TYPE_MAP(:)'], ['LOGICAL', 'SOLVER_FINISHED'], ['TYPE(VARYING_STRING)', 'LABEL'], ['INTEGER(INTG)', 'OUTPUT_TYPE'], ['INTEGER(INTG)', 'SOLVE_TYPE'], ['TYPE(LINEAR_SOLVER_TYPE), POINTER', 'LINEAR_SOLVER'], ['TYPE(NONLINEAR_SOLVER_TYPE), POINTER', 'NONLINEAR_SOLVER'], ['TYPE(DYNAMIC_SOLVER_TYPE), POINTER', 'DYNAMIC_SOLVER'], ['TYPE(DAE_SOLVER_TYPE), POINTER', 'DAE_SOLVER'], ['TYPE(EIGENPROBLEM_SOLVER_TYPE), POINTER', 'EIGENPROBLEM_SOLVER'], ['TYPE(OPTIMISER_SOLVER_TYPE), POINTER', 'OPTIMISER_SOLVER'], ['TYPE(CELLML_EVALUATOR_SOLVER_TYPE), POINTER', 'CELLML_EVALUATOR_SOLVER'], ['TYPE(GeometricTransformationSolverType), POINTER', 'geometricTransformationSolver'], ['TYPE(SOLVER_EQUATIONS_TYPE), POINTER', 'SOLVER_EQUATIONS'], ['TYPE(CELLML_EQUATIONS_TYPE), POINTER', 'CELLML_EQUATIONS']]
+              ! depth 5
+              ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE']
+              ! case pointer
+              IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%SOLVERS)
+              IF (IsAssociated) THEN 
+                WRITE(*,'(A)') &
+                  & "      TYPE(SOLVERS_TYPE), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%SOLVERS " // &
+                  & "(associated): " 
+                PRINT*, "Type already exists and may be a loop!"
+              ELSE
+                PRINT*, "     TYPE(SOLVERS_TYPE), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%SOLVERS (NULL)"
+              ENDIF ! If (IsAssociated)
+              ! depth 5
+              ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE']
+              PRINT*, "     INTEGER(INTG) :: " // &
+                & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%GLOBAL_NUMBER: ", &
+                & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%GLOBAL_NUMBER
+              ! depth 5
+              ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE']
+              ! case pointer
+              IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%LINKING_SOLVER)
+              IF (IsAssociated) THEN 
+                WRITE(*,'(A)') &
+                  & "      TYPE(SOLVER_TYPE), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%LINKING_SOLVER " // &
+                  & "(associated): " 
+                PRINT*, "Type already exists and may be a loop!"
+              ELSE
+                PRINT*, "     TYPE(SOLVER_TYPE), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%LINKING_SOLVER (NULL)"
+              ENDIF ! If (IsAssociated)
+              ! depth 5
+              ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE']
+              PRINT*, "     INTEGER(INTG) :: " // &
+                & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%NUMBER_OF_LINKED_SOLVERS: ", &
+                & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%NUMBER_OF_LINKED_SOLVERS
+              ! depth 5
+              ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE']
+              ! case allocatable
+              IsAllocated = ALLOCATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%LINKED_SOLVERS)
+              IF (IsAllocated) THEN 
+                Dimension = SIZE(SHAPE(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%LINKED_SOLVERS),1)
+                WRITE(*,'(A,I2,A)',advance='no') &
+                  & "      TYPE(SOLVER_PTR_TYPE), ALLOCATABLE :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%LINKED_SOLVERS(:) " // &
+                  & "(allocated, dim=", Dimension, ", size="
+
+                ! loop over dimensions
+                DO I = 1,Dimension
+                  WRITE(*,'(I5)',advance='no') &
+                    & SIZE(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%LINKED_SOLVERS, I)
+                  IF (I /= Dimension) WRITE(*,'(A)',advance='no') " x "
+                ENDDO
+                WRITE(*,'(A)',advance='no') "): " // NEW_LINE('A')
+                PRINT*, "Type already exists and may be a loop!"
+              ELSE
+                PRINT*, "     TYPE(SOLVER_PTR_TYPE), ALLOCATABLE :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%LINKED_SOLVERS(:) (not allocated)"
+              ENDIF ! IF (IsAllocated)
+              ! depth 5
+              ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE']
+              ! case allocatable
+              IsAllocated = ALLOCATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%LINKED_SOLVER_TYPE_MAP)
+              IF (IsAllocated) THEN 
+                Dimension = SIZE(SHAPE(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%LINKED_SOLVER_TYPE_MAP),1)
+                WRITE(*,'(A,I2,A)',advance='no') &
+                  & "      TYPE(SOLVER_PTR_TYPE), ALLOCATABLE :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%LINKED_SOLVER_TYPE_MAP(:) " // &
+                  & "(allocated, dim=", Dimension, ", size="
+
+                ! loop over dimensions
+                DO I = 1,Dimension
+                  WRITE(*,'(I5)',advance='no') &
+                    & SIZE(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%LINKED_SOLVER_TYPE_MAP, I)
+                  IF (I /= Dimension) WRITE(*,'(A)',advance='no') " x "
+                ENDDO
+                WRITE(*,'(A)',advance='no') "): " // NEW_LINE('A')
+                PRINT*, "Type already exists and may be a loop!"
+              ELSE
+                PRINT*, "     TYPE(SOLVER_PTR_TYPE), ALLOCATABLE :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%LINKED_SOLVER_TYPE_MAP(:) (not allocated)"
+              ENDIF ! IF (IsAllocated)
+              ! depth 5
+              ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE']
+              PRINT*, "     LOGICAL :: " // &
+                & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%SOLVER_FINISHED: ", &
+                & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%SOLVER_FINISHED
+              ! depth 5
+              ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE']
+              ! depth 5
+              ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE']
+              PRINT*, "     INTEGER(INTG) :: " // &
+                & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%OUTPUT_TYPE: ", &
+                & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%OUTPUT_TYPE
+              ! depth 5
+              ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE']
+              PRINT*, "     INTEGER(INTG) :: " // &
+                & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%SOLVE_TYPE: ", &
+                & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%SOLVE_TYPE
+              ! depth 5
+              ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE']
+              ! case pointer
+              IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%LINEAR_SOLVER)
+              IF (IsAssociated) THEN 
+                WRITE(*,'(A)') &
+                  & "      TYPE(LINEAR_SOLVER_TYPE), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%LINEAR_SOLVER " // &
+                  & "(associated): " 
+              
+! type [LINEAR_SOLVER_TYPE] has inner types [['TYPE(SOLVER_TYPE), POINTER', 'SOLVER'], ['INTEGER(INTG)', 'LINEAR_SOLVE_TYPE'], ['LOGICAL', 'LINKED_NEWTON_PETSC_SOLVER'], ['TYPE(LINEAR_DIRECT_SOLVER_TYPE), POINTER', 'DIRECT_SOLVER'], ['TYPE(LINEAR_ITERATIVE_SOLVER_TYPE), POINTER', 'ITERATIVE_SOLVER']]
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%LINEAR_SOLVER%SOLVER)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%LINEAR_SOLVER%SOLVER " // &
+                    & "(associated): " 
+                  PRINT*, "Type already exists and may be a loop!"
+                ELSE
+                  PRINT*, "      TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%LINEAR_SOLVER%SOLVER (NULL)"
+                ENDIF ! If (IsAssociated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE']
+                PRINT*, "      INTEGER(INTG) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%LINEAR_SOLVER%LINEAR_SOLVE_TYPE: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%LINEAR_SOLVER%LINEAR_SOLVE_TYPE
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE']
+                PRINT*, "      LOGICAL :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%LINEAR_SOLVER%LINKED_NEWTON_PETSC_SOLVER: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%LINEAR_SOLVER%LINKED_NEWTON_PETSC_SOLVER
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%LINEAR_SOLVER%DIRECT_SOLVER)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(LINEAR_DIRECT_SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%LINEAR_SOLVER%DIRECT_SOLVER " // &
+                    & "(associated): " 
+                
+! type [LINEAR_DIRECT_SOLVER_TYPE] has inner types [['TYPE(LINEAR_SOLVER_TYPE), POINTER', 'LINEAR_SOLVER'], ['INTEGER(INTG)', 'SOLVER_LIBRARY'], ['INTEGER(INTG)', 'SOLVER_MATRICES_LIBRARY'], ['INTEGER(INTG)', 'DIRECT_SOLVER_TYPE'], ['TYPE(PetscPCType)', 'PC'], ['TYPE(PetscKspType)', 'KSP']]
+                ELSE
+                  PRINT*, "      TYPE(LINEAR_DIRECT_SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%LINEAR_SOLVER%DIRECT_SOLVER (NULL)"
+                ENDIF ! If (IsAssociated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%LINEAR_SOLVER%ITERATIVE_SOLVER)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(LINEAR_ITERATIVE_SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%LINEAR_SOLVER%ITERATIVE_SOLVER " // &
+                    & "(associated): " 
+                
+! type [LINEAR_ITERATIVE_SOLVER_TYPE] has inner types [['TYPE(LINEAR_SOLVER_TYPE), POINTER', 'LINEAR_SOLVER'], ['INTEGER(INTG)', 'SOLVER_LIBRARY'], ['INTEGER(INTG)', 'SOLVER_MATRICES_LIBRARY'], ['INTEGER(INTG)', 'ITERATIVE_SOLVER_TYPE'], ['INTEGER(INTG)', 'ITERATIVE_PRECONDITIONER_TYPE'], ['INTEGER(INTG)', 'SOLUTION_INITIALISE_TYPE'], ['INTEGER(INTG)', 'MAXIMUM_NUMBER_OF_ITERATIONS'], ['REAL(DP)', 'RELATIVE_TOLERANCE'], ['REAL(DP)', 'ABSOLUTE_TOLERANCE'], ['REAL(DP)', 'DIVERGENCE_TOLERANCE'], ['INTEGER(INTG)', 'GMRES_RESTART'], ['TYPE(PetscPCType)', 'PC'], ['TYPE(PetscKspType)', 'KSP']]
+                ELSE
+                  PRINT*, "      TYPE(LINEAR_ITERATIVE_SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%LINEAR_SOLVER%ITERATIVE_SOLVER (NULL)"
+                ENDIF ! If (IsAssociated)
+              ELSE
+                PRINT*, "     TYPE(LINEAR_SOLVER_TYPE), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%LINEAR_SOLVER (NULL)"
+              ENDIF ! If (IsAssociated)
+              ! depth 5
+              ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE']
+              ! case pointer
+              IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%NONLINEAR_SOLVER)
+              IF (IsAssociated) THEN 
+                WRITE(*,'(A)') &
+                  & "      TYPE(NONLINEAR_SOLVER_TYPE), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%NONLINEAR_SOLVER " // &
+                  & "(associated): " 
+              
+! type [NONLINEAR_SOLVER_TYPE] has inner types [['TYPE(SOLVER_TYPE), POINTER', 'SOLVER'], ['INTEGER(INTG)', 'NONLINEAR_SOLVE_TYPE'], ['TYPE(NEWTON_SOLVER_TYPE), POINTER', 'NEWTON_SOLVER'], ['TYPE(QUASI_NEWTON_SOLVER_TYPE), POINTER', 'QUASI_NEWTON_SOLVER']]
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%NONLINEAR_SOLVER%SOLVER)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%NONLINEAR_SOLVER%SOLVER " // &
+                    & "(associated): " 
+                  PRINT*, "Type already exists and may be a loop!"
+                ELSE
+                  PRINT*, "      TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%NONLINEAR_SOLVER%SOLVER (NULL)"
+                ENDIF ! If (IsAssociated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE']
+                PRINT*, "      INTEGER(INTG) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%NONLINEAR_SOLVER%NONLINEAR_SOLVE_TYPE: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%NONLINEAR_SOLVER%NONLINEAR_SOLVE_TYPE
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%NONLINEAR_SOLVER%NEWTON_SOLVER)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(NEWTON_SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%NONLINEAR_SOLVER%NEWTON_SOLVER " // &
+                    & "(associated): " 
+                
+! type [NEWTON_SOLVER_TYPE] has inner types [['TYPE(NONLINEAR_SOLVER_TYPE), POINTER', 'NONLINEAR_SOLVER'], ['INTEGER(INTG)', 'NEWTON_SOLVE_TYPE'], ['INTEGER(INTG)', 'SOLUTION_INITIALISE_TYPE'], ['INTEGER(INTG)', 'TOTAL_NUMBER_OF_FUNCTION_EVALUATIONS'], ['INTEGER(INTG)', 'TOTAL_NUMBER_OF_JACOBIAN_EVALUATIONS'], ['INTEGER(INTG)', 'MAXIMUM_NUMBER_OF_ITERATIONS'], ['INTEGER(INTG)', 'MAXIMUM_NUMBER_OF_FUNCTION_EVALUATIONS'], ['INTEGER(INTG)', 'JACOBIAN_CALCULATION_TYPE'], ['INTEGER(INTG)', 'convergenceTestType'], ['REAL(DP)', 'ABSOLUTE_TOLERANCE'], ['REAL(DP)', 'RELATIVE_TOLERANCE'], ['REAL(DP)', 'SOLUTION_TOLERANCE'], ['TYPE(NewtonSolverConvergenceTest), POINTER', 'convergenceTest'], ['TYPE(NEWTON_LINESEARCH_SOLVER_TYPE), POINTER', 'LINESEARCH_SOLVER'], ['TYPE(NEWTON_TRUSTREGION_SOLVER_TYPE), POINTER', 'TRUSTREGION_SOLVER'], ['TYPE(SOLVER_TYPE), POINTER', 'LINEAR_SOLVER'], ['TYPE(SOLVER_TYPE), POINTER', 'CELLML_EVALUATOR_SOLVER']]
+                ELSE
+                  PRINT*, "      TYPE(NEWTON_SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%NONLINEAR_SOLVER%NEWTON_SOLVER (NULL)"
+                ENDIF ! If (IsAssociated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%NONLINEAR_SOLVER%QUASI_NEWTON_SOLVER)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(QUASI_NEWTON_SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%NONLINEAR_SOLVER%QUASI_NEWTON_SOLVER " // &
+                    & "(associated): " 
+                
+! type [QUASI_NEWTON_SOLVER_TYPE] has inner types [['TYPE(NONLINEAR_SOLVER_TYPE), POINTER', 'NONLINEAR_SOLVER'], ['INTEGER(INTG)', 'QUASI_NEWTON_SOLVE_TYPE'], ['INTEGER(INTG)', 'QUASI_NEWTON_TYPE'], ['INTEGER(INTG)', 'RESTART_TYPE'], ['INTEGER(INTG)', 'RESTART'], ['INTEGER(INTG)', 'SCALE_TYPE'], ['INTEGER(INTG)', 'SOLUTION_INITIALISE_TYPE'], ['INTEGER(INTG)', 'TOTAL_NUMBER_OF_FUNCTION_EVALUATIONS'], ['INTEGER(INTG)', 'TOTAL_NUMBER_OF_JACOBIAN_EVALUATIONS'], ['INTEGER(INTG)', 'MAXIMUM_NUMBER_OF_ITERATIONS'], ['INTEGER(INTG)', 'MAXIMUM_NUMBER_OF_FUNCTION_EVALUATIONS'], ['INTEGER(INTG)', 'JACOBIAN_CALCULATION_TYPE'], ['INTEGER(INTG)', 'convergenceTestType'], ['REAL(DP)', 'ABSOLUTE_TOLERANCE'], ['REAL(DP)', 'RELATIVE_TOLERANCE'], ['REAL(DP)', 'SOLUTION_TOLERANCE'], ['TYPE(NewtonSolverConvergenceTest), POINTER', 'convergenceTest'], ['TYPE(QUASI_NEWTON_LINESEARCH_SOLVER_TYPE), POINTER', 'LINESEARCH_SOLVER'], ['TYPE(QUASI_NEWTON_TRUSTREGION_SOLVER_TYPE), POINTER', 'TRUSTREGION_SOLVER'], ['TYPE(SOLVER_TYPE), POINTER', 'LINEAR_SOLVER'], ['TYPE(SOLVER_TYPE), POINTER', 'CELLML_EVALUATOR_SOLVER']]
+                ELSE
+                  PRINT*, "      TYPE(QUASI_NEWTON_SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%NONLINEAR_SOLVER%QUASI_NEWTON_SOLVER (NULL)"
+                ENDIF ! If (IsAssociated)
+              ELSE
+                PRINT*, "     TYPE(NONLINEAR_SOLVER_TYPE), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%NONLINEAR_SOLVER (NULL)"
+              ENDIF ! If (IsAssociated)
+              ! depth 5
+              ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE']
+              ! case pointer
+              IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DYNAMIC_SOLVER)
+              IF (IsAssociated) THEN 
+                WRITE(*,'(A)') &
+                  & "      TYPE(DYNAMIC_SOLVER_TYPE), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DYNAMIC_SOLVER " // &
+                  & "(associated): " 
+              
+! type [DYNAMIC_SOLVER_TYPE] has inner types [['TYPE(SOLVER_TYPE), POINTER', 'SOLVER'], ['INTEGER(INTG)', 'SOLVER_LIBRARY'], ['LOGICAL', 'SOLVER_INITIALISED'], ['INTEGER(INTG)', 'LINEARITY'], ['INTEGER(INTG)', 'ORDER'], ['INTEGER(INTG)', 'DEGREE'], ['INTEGER(INTG)', 'SCHEME'], ['REAL(DP), ALLOCATABLE', 'THETA(:)'], ['LOGICAL', 'EXPLICIT'], ['LOGICAL', 'RESTART'], ['LOGICAL', 'ALE'], ['LOGICAL', 'FSI'], ['LOGICAL', 'UPDATE_BC'], ['REAL(DP)', 'CURRENT_TIME'], ['REAL(DP)', 'TIME_INCREMENT'], ['TYPE(SOLVER_TYPE), POINTER', 'LINEAR_SOLVER'], ['TYPE(SOLVER_TYPE), POINTER', 'NONLINEAR_SOLVER']]
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DYNAMIC_SOLVER%SOLVER)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DYNAMIC_SOLVER%SOLVER " // &
+                    & "(associated): " 
+                  PRINT*, "Type already exists and may be a loop!"
+                ELSE
+                  PRINT*, "      TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DYNAMIC_SOLVER%SOLVER (NULL)"
+                ENDIF ! If (IsAssociated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE']
+                PRINT*, "      INTEGER(INTG) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DYNAMIC_SOLVER%SOLVER_LIBRARY: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DYNAMIC_SOLVER%SOLVER_LIBRARY
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE']
+                PRINT*, "      LOGICAL :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DYNAMIC_SOLVER%SOLVER_INITIALISED: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DYNAMIC_SOLVER%SOLVER_INITIALISED
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE']
+                PRINT*, "      INTEGER(INTG) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DYNAMIC_SOLVER%LINEARITY: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DYNAMIC_SOLVER%LINEARITY
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE']
+                PRINT*, "      INTEGER(INTG) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DYNAMIC_SOLVER%ORDER: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DYNAMIC_SOLVER%ORDER
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE']
+                PRINT*, "      INTEGER(INTG) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DYNAMIC_SOLVER%DEGREE: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DYNAMIC_SOLVER%DEGREE
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE']
+                PRINT*, "      INTEGER(INTG) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DYNAMIC_SOLVER%SCHEME: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DYNAMIC_SOLVER%SCHEME
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE']
+                ! case allocatable
+                IsAllocated = ALLOCATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DYNAMIC_SOLVER%THETA)
+                IF (IsAllocated) THEN 
+                  Dimension = SIZE(SHAPE(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DYNAMIC_SOLVER%THETA),1)
+                  WRITE(*,'(A,I2,A)',advance='no') &
+                    & "       REAL(DP), ALLOCATABLE :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DYNAMIC_SOLVER%THETA(:) " // &
+                    & "(allocated, dim=", Dimension, ", size="
+
+                  ! loop over dimensions
+                  DO I = 1,Dimension
+                    WRITE(*,'(I5)',advance='no') &
+                      & SIZE(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DYNAMIC_SOLVER%THETA, I)
+                    IF (I /= Dimension) WRITE(*,'(A)',advance='no') " x "
+                  ENDDO
+                  WRITE(*,'(A)',advance='no') "): " // NEW_LINE('A')
+                  WRITE(*, *) Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DYNAMIC_SOLVER%THETA
+                ELSE
+                  PRINT*, "      REAL(DP), ALLOCATABLE :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DYNAMIC_SOLVER%THETA(:) (not allocated)"
+                ENDIF ! IF (IsAllocated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE']
+                PRINT*, "      LOGICAL :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DYNAMIC_SOLVER%EXPLICIT: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DYNAMIC_SOLVER%EXPLICIT
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE']
+                PRINT*, "      LOGICAL :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DYNAMIC_SOLVER%RESTART: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DYNAMIC_SOLVER%RESTART
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE']
+                PRINT*, "      LOGICAL :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DYNAMIC_SOLVER%ALE: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DYNAMIC_SOLVER%ALE
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE']
+                PRINT*, "      LOGICAL :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DYNAMIC_SOLVER%FSI: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DYNAMIC_SOLVER%FSI
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE']
+                PRINT*, "      LOGICAL :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DYNAMIC_SOLVER%UPDATE_BC: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DYNAMIC_SOLVER%UPDATE_BC
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE']
+                PRINT*, "      REAL(DP) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DYNAMIC_SOLVER%CURRENT_TIME: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DYNAMIC_SOLVER%CURRENT_TIME
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE']
+                PRINT*, "      REAL(DP) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DYNAMIC_SOLVER%TIME_INCREMENT: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DYNAMIC_SOLVER%TIME_INCREMENT
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DYNAMIC_SOLVER%LINEAR_SOLVER)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DYNAMIC_SOLVER%LINEAR_SOLVER " // &
+                    & "(associated): " 
+                  PRINT*, "Type already exists and may be a loop!"
+                ELSE
+                  PRINT*, "      TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DYNAMIC_SOLVER%LINEAR_SOLVER (NULL)"
+                ENDIF ! If (IsAssociated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DYNAMIC_SOLVER%NONLINEAR_SOLVER)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DYNAMIC_SOLVER%NONLINEAR_SOLVER " // &
+                    & "(associated): " 
+                  PRINT*, "Type already exists and may be a loop!"
+                ELSE
+                  PRINT*, "      TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DYNAMIC_SOLVER%NONLINEAR_SOLVER (NULL)"
+                ENDIF ! If (IsAssociated)
+              ELSE
+                PRINT*, "     TYPE(DYNAMIC_SOLVER_TYPE), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DYNAMIC_SOLVER (NULL)"
+              ENDIF ! If (IsAssociated)
+              ! depth 5
+              ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE']
+              ! case pointer
+              IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DAE_SOLVER)
+              IF (IsAssociated) THEN 
+                WRITE(*,'(A)') &
+                  & "      TYPE(DAE_SOLVER_TYPE), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DAE_SOLVER " // &
+                  & "(associated): " 
+              
+! type [DAE_SOLVER_TYPE] has inner types [['TYPE(SOLVER_TYPE), POINTER', 'SOLVER'], ['INTEGER(INTG)', 'DAE_TYPE'], ['INTEGER(INTG)', 'DAE_SOLVE_TYPE'], ['REAL(DP)', 'START_TIME'], ['REAL(DP)', 'END_TIME'], ['REAL(DP)', 'INITIAL_STEP'], ['TYPE(EULER_DAE_SOLVER_TYPE), POINTER', 'EULER_SOLVER'], ['TYPE(CRANK_NICOLSON_DAE_SOLVER_TYPE), POINTER', 'CRANK_NICOLSON_SOLVER'], ['TYPE(RUNGE_KUTTA_DAE_SOLVER_TYPE), POINTER', 'RUNGE_KUTTA_SOLVER'], ['TYPE(ADAMS_MOULTON_DAE_SOLVER_TYPE), POINTER', 'ADAMS_MOULTON_SOLVER'], ['TYPE(BDF_DAE_SOLVER_TYPE), POINTER', 'BDF_SOLVER'], ['TYPE(RUSH_LARSON_DAE_SOLVER_TYPE), POINTER', 'RUSH_LARSON_SOLVER'], ['TYPE(EXTERNAL_DAE_SOLVER_TYPE), POINTER', 'EXTERNAL_SOLVER']]
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DAE_SOLVER%SOLVER)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DAE_SOLVER%SOLVER " // &
+                    & "(associated): " 
+                  PRINT*, "Type already exists and may be a loop!"
+                ELSE
+                  PRINT*, "      TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DAE_SOLVER%SOLVER (NULL)"
+                ENDIF ! If (IsAssociated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE']
+                PRINT*, "      INTEGER(INTG) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DAE_SOLVER%DAE_TYPE: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DAE_SOLVER%DAE_TYPE
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE']
+                PRINT*, "      INTEGER(INTG) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DAE_SOLVER%DAE_SOLVE_TYPE: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DAE_SOLVER%DAE_SOLVE_TYPE
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE']
+                PRINT*, "      REAL(DP) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DAE_SOLVER%START_TIME: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DAE_SOLVER%START_TIME
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE']
+                PRINT*, "      REAL(DP) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DAE_SOLVER%END_TIME: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DAE_SOLVER%END_TIME
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE']
+                PRINT*, "      REAL(DP) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DAE_SOLVER%INITIAL_STEP: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DAE_SOLVER%INITIAL_STEP
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DAE_SOLVER%EULER_SOLVER)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(EULER_DAE_SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DAE_SOLVER%EULER_SOLVER " // &
+                    & "(associated): " 
+                
+! type [EULER_DAE_SOLVER_TYPE] has inner types [['TYPE(DAE_SOLVER_TYPE), POINTER', 'DAE_SOLVER'], ['INTEGER(INTG)', 'EULER_TYPE'], ['TYPE(FORWARD_EULER_DAE_SOLVER_TYPE), POINTER', 'FORWARD_EULER_SOLVER'], ['TYPE(BACKWARD_EULER_DAE_SOLVER_TYPE), POINTER', 'BACKWARD_EULER_SOLVER'], ['TYPE(IMPROVED_EULER_DAE_SOLVER_TYPE), POINTER', 'IMPROVED_EULER_SOLVER'], ['INTEGER(INTG)', 'SOLVER_LIBRARY']]
+                ELSE
+                  PRINT*, "      TYPE(EULER_DAE_SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DAE_SOLVER%EULER_SOLVER (NULL)"
+                ENDIF ! If (IsAssociated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DAE_SOLVER%CRANK_NICOLSON_SOLVER)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(CRANK_NICOLSON_DAE_SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DAE_SOLVER%CRANK_NICOLSON_SOLVER " // &
+                    & "(associated): " 
+                
+! type [CRANK_NICOLSON_DAE_SOLVER_TYPE] has inner types [['TYPE(DAE_SOLVER_TYPE), POINTER', 'DAE_SOLVER'], ['INTEGER(INTG)', 'SOLVER_LIBRARY']]
+                ELSE
+                  PRINT*, "      TYPE(CRANK_NICOLSON_DAE_SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DAE_SOLVER%CRANK_NICOLSON_SOLVER (NULL)"
+                ENDIF ! If (IsAssociated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DAE_SOLVER%RUNGE_KUTTA_SOLVER)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(RUNGE_KUTTA_DAE_SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DAE_SOLVER%RUNGE_KUTTA_SOLVER " // &
+                    & "(associated): " 
+                
+! type [RUNGE_KUTTA_DAE_SOLVER_TYPE] has inner types [['TYPE(DAE_SOLVER_TYPE), POINTER', 'DAE_SOLVER'], ['INTEGER(INTG)', 'SOLVER_LIBRARY']]
+                ELSE
+                  PRINT*, "      TYPE(RUNGE_KUTTA_DAE_SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DAE_SOLVER%RUNGE_KUTTA_SOLVER (NULL)"
+                ENDIF ! If (IsAssociated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DAE_SOLVER%ADAMS_MOULTON_SOLVER)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(ADAMS_MOULTON_DAE_SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DAE_SOLVER%ADAMS_MOULTON_SOLVER " // &
+                    & "(associated): " 
+                
+! type [ADAMS_MOULTON_DAE_SOLVER_TYPE] has inner types [['TYPE(DAE_SOLVER_TYPE), POINTER', 'DAE_SOLVER'], ['INTEGER(INTG)', 'SOLVER_LIBRARY']]
+                ELSE
+                  PRINT*, "      TYPE(ADAMS_MOULTON_DAE_SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DAE_SOLVER%ADAMS_MOULTON_SOLVER (NULL)"
+                ENDIF ! If (IsAssociated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DAE_SOLVER%BDF_SOLVER)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(BDF_DAE_SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DAE_SOLVER%BDF_SOLVER " // &
+                    & "(associated): " 
+                
+! type [BDF_DAE_SOLVER_TYPE] has inner types [['TYPE(DAE_SOLVER_TYPE), POINTER', 'DAE_SOLVER'], ['INTEGER(INTG)', 'SOLVER_LIBRARY']]
+                ELSE
+                  PRINT*, "      TYPE(BDF_DAE_SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DAE_SOLVER%BDF_SOLVER (NULL)"
+                ENDIF ! If (IsAssociated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DAE_SOLVER%RUSH_LARSON_SOLVER)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(RUSH_LARSON_DAE_SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DAE_SOLVER%RUSH_LARSON_SOLVER " // &
+                    & "(associated): " 
+                
+! type [RUSH_LARSON_DAE_SOLVER_TYPE] has inner types [['TYPE(DAE_SOLVER_TYPE), POINTER', 'DAE_SOLVER'], ['INTEGER(INTG)', 'SOLVER_LIBRARY']]
+                ELSE
+                  PRINT*, "      TYPE(RUSH_LARSON_DAE_SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DAE_SOLVER%RUSH_LARSON_SOLVER (NULL)"
+                ENDIF ! If (IsAssociated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%DAE_SOLVER%EXTERNAL_SOLVER)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(EXTERNAL_DAE_SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DAE_SOLVER%EXTERNAL_SOLVER " // &
+                    & "(associated): " 
+                
+! type [EXTERNAL_DAE_SOLVER_TYPE] has inner types [['TYPE(DAE_SOLVER_TYPE), POINTER', 'DAE_SOLVER']]
+                ELSE
+                  PRINT*, "      TYPE(EXTERNAL_DAE_SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DAE_SOLVER%EXTERNAL_SOLVER (NULL)"
+                ENDIF ! If (IsAssociated)
+              ELSE
+                PRINT*, "     TYPE(DAE_SOLVER_TYPE), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%DAE_SOLVER (NULL)"
+              ENDIF ! If (IsAssociated)
+              ! depth 5
+              ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE']
+              ! case pointer
+              IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%EIGENPROBLEM_SOLVER)
+              IF (IsAssociated) THEN 
+                WRITE(*,'(A)') &
+                  & "      TYPE(EIGENPROBLEM_SOLVER_TYPE), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%EIGENPROBLEM_SOLVER " // &
+                  & "(associated): " 
+              
+! type [EIGENPROBLEM_SOLVER_TYPE] has inner types [['TYPE(SOLVER_TYPE), POINTER', 'SOLVER'], ['INTEGER(INTG)', 'SOLVER_LIBRARY'], ['INTEGER(INTG)', 'SOLVER_MATRICES_LIBRARY']]
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%EIGENPROBLEM_SOLVER%SOLVER)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%EIGENPROBLEM_SOLVER%SOLVER " // &
+                    & "(associated): " 
+                  PRINT*, "Type already exists and may be a loop!"
+                ELSE
+                  PRINT*, "      TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%EIGENPROBLEM_SOLVER%SOLVER (NULL)"
+                ENDIF ! If (IsAssociated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE']
+                PRINT*, "      INTEGER(INTG) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%EIGENPROBLEM_SOLVER%SOLVER_LIBRARY: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%EIGENPROBLEM_SOLVER%SOLVER_LIBRARY
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE']
+                PRINT*, "      INTEGER(INTG) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%EIGENPROBLEM_SOLVER%SOLVER_MATRICES_LIBRARY: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%EIGENPROBLEM_SOLVER%SOLVER_MATRICES_LIBRARY
+              ELSE
+                PRINT*, "     TYPE(EIGENPROBLEM_SOLVER_TYPE), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%EIGENPROBLEM_SOLVER (NULL)"
+              ENDIF ! If (IsAssociated)
+              ! depth 5
+              ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE']
+              ! case pointer
+              IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%OPTIMISER_SOLVER)
+              IF (IsAssociated) THEN 
+                WRITE(*,'(A)') &
+                  & "      TYPE(OPTIMISER_SOLVER_TYPE), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%OPTIMISER_SOLVER " // &
+                  & "(associated): " 
+              
+! type [OPTIMISER_SOLVER_TYPE] has inner types [['TYPE(SOLVER_TYPE), POINTER', 'SOLVER'], ['INTEGER(INTG)', 'SOLVER_LIBRARY'], ['INTEGER(INTG)', 'SOLVER_MATRICES_LIBRARY']]
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%OPTIMISER_SOLVER%SOLVER)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%OPTIMISER_SOLVER%SOLVER " // &
+                    & "(associated): " 
+                  PRINT*, "Type already exists and may be a loop!"
+                ELSE
+                  PRINT*, "      TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%OPTIMISER_SOLVER%SOLVER (NULL)"
+                ENDIF ! If (IsAssociated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE']
+                PRINT*, "      INTEGER(INTG) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%OPTIMISER_SOLVER%SOLVER_LIBRARY: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%OPTIMISER_SOLVER%SOLVER_LIBRARY
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE']
+                PRINT*, "      INTEGER(INTG) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%OPTIMISER_SOLVER%SOLVER_MATRICES_LIBRARY: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%OPTIMISER_SOLVER%SOLVER_MATRICES_LIBRARY
+              ELSE
+                PRINT*, "     TYPE(OPTIMISER_SOLVER_TYPE), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%OPTIMISER_SOLVER (NULL)"
+              ENDIF ! If (IsAssociated)
+              ! depth 5
+              ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE']
+              ! case pointer
+              IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%CELLML_EVALUATOR_SOLVER)
+              IF (IsAssociated) THEN 
+                WRITE(*,'(A)') &
+                  & "      TYPE(CELLML_EVALUATOR_SOLVER_TYPE), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%CELLML_EVALUATOR_SOLVER " // &
+                  & "(associated): " 
+              
+! type [CELLML_EVALUATOR_SOLVER_TYPE] has inner types [['TYPE(SOLVER_TYPE), POINTER', 'SOLVER'], ['INTEGER(INTG)', 'SOLVER_LIBRARY'], ['TYPE(CELLML_TYPE), POINTER', 'CELLML'], ['REAL(DP)', 'CURRENT_TIME']]
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%CELLML_EVALUATOR_SOLVER%SOLVER)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%CELLML_EVALUATOR_SOLVER%SOLVER " // &
+                    & "(associated): " 
+                  PRINT*, "Type already exists and may be a loop!"
+                ELSE
+                  PRINT*, "      TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%CELLML_EVALUATOR_SOLVER%SOLVER (NULL)"
+                ENDIF ! If (IsAssociated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE']
+                PRINT*, "      INTEGER(INTG) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%CELLML_EVALUATOR_SOLVER%SOLVER_LIBRARY: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%CELLML_EVALUATOR_SOLVER%SOLVER_LIBRARY
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%CELLML_EVALUATOR_SOLVER%CELLML)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(CELLML_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%CELLML_EVALUATOR_SOLVER%CELLML " // &
+                    & "(associated): " 
+                
+! type [CELLML_TYPE] has inner types [['TYPE(REGION_TYPE), POINTER', 'REGION'], ['INTEGER(INTG)', 'GLOBAL_NUMBER'], ['INTEGER(INTG)', 'USER_NUMBER'], ['TYPE(CELLML_ENVIRONMENTS_TYPE), POINTER', 'ENVIRONMENTS'], ['LOGICAL', 'CELLML_FINISHED'], ['INTEGER(INTG)', 'NUMBER_OF_MODELS'], ['INTEGER(INTG)', 'MAXIMUM_NUMBER_OF_STATE'], ['INTEGER(INTG)', 'MAXIMUM_NUMBER_OF_PARAMETERS'], ['INTEGER(INTG)', 'MAXIMUM_NUMBER_OF_INTERMEDIATE'], ['TYPE(CELLML_MODEL_PTR_TYPE), ALLOCATABLE', 'MODELS(:)'], ['TYPE(CELLML_FIELD_MAPS_TYPE), POINTER', 'FIELD_MAPS'], ['TYPE(CELLML_MODELS_FIELD_TYPE), POINTER', 'MODELS_FIELD'], ['TYPE(CELLML_STATE_FIELD_TYPE), POINTER', 'STATE_FIELD'], ['TYPE(CELLML_INTERMEDIATE_FIELD_TYPE), POINTER', 'INTERMEDIATE_FIELD'], ['TYPE(CELLML_PARAMETERS_FIELD_TYPE), POINTER', 'PARAMETERS_FIELD'], ['LOGICAL', 'CELLML_GENERATED']]
+                ELSE
+                  PRINT*, "      TYPE(CELLML_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%CELLML_EVALUATOR_SOLVER%CELLML (NULL)"
+                ENDIF ! If (IsAssociated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE']
+                PRINT*, "      REAL(DP) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%CELLML_EVALUATOR_SOLVER%CURRENT_TIME: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%CELLML_EVALUATOR_SOLVER%CURRENT_TIME
+              ELSE
+                PRINT*, "     TYPE(CELLML_EVALUATOR_SOLVER_TYPE), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%CELLML_EVALUATOR_SOLVER (NULL)"
+              ENDIF ! If (IsAssociated)
+              ! depth 5
+              ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE']
+              ! case pointer
+              IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%geometricTransformationSolver)
+              IF (IsAssociated) THEN 
+                WRITE(*,'(A)') &
+                  & "      TYPE(GeometricTransformationSolverType), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%geometricTransformationSolver " // &
+                  & "(associated): " 
+              
+! type [GeometricTransformationSolverType] has inner types [['TYPE(SOLVER_TYPE), POINTER', 'solver'], ['LOGICAL', 'arbitraryPath'], ['INTEGER(INTG)', 'numberOfIncrements'], ['REAL(DP), ALLOCATABLE', 'scalings(:)'], ['REAL(DP), ALLOCATABLE', 'transformationMatrices(:,:,:)'], ['TYPE(FIELD_TYPE), POINTER', 'field'], ['INTEGER(INTG)', 'fieldVariableType']]
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%geometricTransformationSolver%solver)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%geometricTransformationSolver%solver " // &
+                    & "(associated): " 
+                  PRINT*, "Type already exists and may be a loop!"
+                ELSE
+                  PRINT*, "      TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%geometricTransformationSolver%solver (NULL)"
+                ENDIF ! If (IsAssociated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType']
+                PRINT*, "      LOGICAL :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%geometricTransformationSolver%arbitraryPath: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%geometricTransformationSolver%arbitraryPath
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType']
+                PRINT*, "      INTEGER(INTG) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%geometricTransformationSolver%numberOfIncrements: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%geometricTransformationSolver%numberOfIncrements
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType']
+                ! case allocatable
+                IsAllocated = ALLOCATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%geometricTransformationSolver%scalings)
+                IF (IsAllocated) THEN 
+                  Dimension = SIZE(SHAPE(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%geometricTransformationSolver%scalings),1)
+                  WRITE(*,'(A,I2,A)',advance='no') &
+                    & "       REAL(DP), ALLOCATABLE :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%geometricTransformationSolver%scalings(:) " // &
+                    & "(allocated, dim=", Dimension, ", size="
+
+                  ! loop over dimensions
+                  DO I = 1,Dimension
+                    WRITE(*,'(I5)',advance='no') &
+                      & SIZE(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%geometricTransformationSolver%scalings, I)
+                    IF (I /= Dimension) WRITE(*,'(A)',advance='no') " x "
+                  ENDDO
+                  WRITE(*,'(A)',advance='no') "): " // NEW_LINE('A')
+                  WRITE(*, *) Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%geometricTransformationSolver%scalings
+                ELSE
+                  PRINT*, "      REAL(DP), ALLOCATABLE :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%geometricTransformationSolver%scalings(:) (not allocated)"
+                ENDIF ! IF (IsAllocated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType']
+                ! case allocatable
+                IsAllocated = ALLOCATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%geometricTransformationSolver% &
+                & transformationMatrices)
+                IF (IsAllocated) THEN 
+                  Dimension = SIZE(SHAPE(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%geometricTransformationSolver% &
+                  & transformationMatrices),1)
+                  WRITE(*,'(A,I2,A)',advance='no') &
+                    & "       REAL(DP), ALLOCATABLE :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%geometricTransformationSolver%" // &
+                    & "transformationMatrices(:,:,:) " // &
+                    & "(allocated, dim=", Dimension, ", size="
+
+                  ! loop over dimensions
+                  DO I = 1,Dimension
+                    WRITE(*,'(I5)',advance='no') &
+                      & SIZE(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%geometricTransformationSolver%transformationMatrices, I)
+                    IF (I /= Dimension) WRITE(*,'(A)',advance='no') " x "
+                  ENDDO
+                  WRITE(*,'(A)',advance='no') "): " // NEW_LINE('A')
+                  WRITE(*, *) Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%geometricTransformationSolver%transformationMatrices
+                ELSE
+                  PRINT*, "      REAL(DP), ALLOCATABLE :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%geometricTransformationSolver%" // &
+                    & "transformationMatrices(:,:,:) (not allocated)"
+                ENDIF ! IF (IsAllocated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%geometricTransformationSolver%field)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(FIELD_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%geometricTransformationSolver%field " // &
+                    & "(associated): " 
+                
+! type [FIELD_TYPE] has inner types [['INTEGER(INTG)', 'GLOBAL_NUMBER'], ['INTEGER(INTG)', 'USER_NUMBER'], ['TYPE(VARYING_STRING)', 'LABEL'], ['LOGICAL', 'FIELD_FINISHED'], ['TYPE(FIELDS_TYPE), POINTER', 'FIELDS'], ['TYPE(REGION_TYPE), POINTER', 'REGION'], ['TYPE(INTERFACE_TYPE), POINTER', 'INTERFACE'], ['INTEGER(INTG)', 'TYPE'], ['INTEGER(INTG)', 'DEPENDENT_TYPE'], ['TYPE(DECOMPOSITION_TYPE), POINTER', 'DECOMPOSITION'], ['INTEGER(INTG)', 'NUMBER_OF_VARIABLES'], ['TYPE(FIELD_VARIABLE_PTR_TYPE), ALLOCATABLE', 'VARIABLE_TYPE_MAP(:)'], ['TYPE(FIELD_VARIABLE_TYPE), ALLOCATABLE', 'VARIABLES(:)'], ['TYPE(FIELD_SCALINGS_TYPE)', 'SCALINGS'], ['TYPE(FIELD_TYPE), POINTER', 'GEOMETRIC_FIELD'], ['TYPE(FIELD_GEOMETRIC_PARAMETERS_TYPE), POINTER', 'GEOMETRIC_FIELD_PARAMETERS'], ['TYPE(FIELD_CREATE_VALUES_CACHE_TYPE), POINTER', 'CREATE_VALUES_CACHE'], ['TYPE(DATA_PROJECTION_TYPE), POINTER', 'DataProjection']]
+                ELSE
+                  PRINT*, "      TYPE(FIELD_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%geometricTransformationSolver%field (NULL)"
+                ENDIF ! If (IsAssociated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType', 'FIELD_TYPE']
+                PRINT*, "      INTEGER(INTG) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%geometricTransformationSolver%fieldVariableType: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%geometricTransformationSolver%fieldVariableType
+              ELSE
+                PRINT*, "     TYPE(GeometricTransformationSolverType), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%geometricTransformationSolver (NULL)"
+              ENDIF ! If (IsAssociated)
+              ! depth 5
+              ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType', 'FIELD_TYPE']
+              ! case pointer
+              IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%SOLVER_EQUATIONS)
+              IF (IsAssociated) THEN 
+                WRITE(*,'(A)') &
+                  & "      TYPE(SOLVER_EQUATIONS_TYPE), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%SOLVER_EQUATIONS " // &
+                  & "(associated): " 
+              
+! type [SOLVER_EQUATIONS_TYPE] has inner types [['TYPE(SOLVER_TYPE), POINTER', 'SOLVER'], ['LOGICAL', 'SOLVER_EQUATIONS_FINISHED'], ['INTEGER(INTG)', 'LINEARITY'], ['INTEGER(INTG)', 'TIME_DEPENDENCE'], ['INTEGER(INTG)', 'SPARSITY_TYPE'], ['TYPE(SOLVER_MAPPING_TYPE), POINTER', 'SOLVER_MAPPING'], ['TYPE(SOLVER_MATRICES_TYPE), POINTER', 'SOLVER_MATRICES'], ['TYPE(BOUNDARY_CONDITIONS_TYPE), POINTER', 'BOUNDARY_CONDITIONS']]
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType', 'FIELD_TYPE', 'SOLVER_EQUATIONS_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%SOLVER_EQUATIONS%SOLVER)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%SOLVER_EQUATIONS%SOLVER " // &
+                    & "(associated): " 
+                  PRINT*, "Type already exists and may be a loop!"
+                ELSE
+                  PRINT*, "      TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%SOLVER_EQUATIONS%SOLVER (NULL)"
+                ENDIF ! If (IsAssociated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType', 'FIELD_TYPE', 'SOLVER_EQUATIONS_TYPE']
+                PRINT*, "      LOGICAL :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%SOLVER_EQUATIONS%SOLVER_EQUATIONS_FINISHED: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%SOLVER_EQUATIONS%SOLVER_EQUATIONS_FINISHED
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType', 'FIELD_TYPE', 'SOLVER_EQUATIONS_TYPE']
+                PRINT*, "      INTEGER(INTG) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%SOLVER_EQUATIONS%LINEARITY: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%SOLVER_EQUATIONS%LINEARITY
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType', 'FIELD_TYPE', 'SOLVER_EQUATIONS_TYPE']
+                PRINT*, "      INTEGER(INTG) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%SOLVER_EQUATIONS%TIME_DEPENDENCE: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%SOLVER_EQUATIONS%TIME_DEPENDENCE
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType', 'FIELD_TYPE', 'SOLVER_EQUATIONS_TYPE']
+                PRINT*, "      INTEGER(INTG) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%SOLVER_EQUATIONS%SPARSITY_TYPE: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%SOLVER_EQUATIONS%SPARSITY_TYPE
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType', 'FIELD_TYPE', 'SOLVER_EQUATIONS_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%SOLVER_EQUATIONS%SOLVER_MAPPING)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(SOLVER_MAPPING_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%SOLVER_EQUATIONS%SOLVER_MAPPING " // &
+                    & "(associated): " 
+                
+! type [SOLVER_MAPPING_TYPE] has inner types [['TYPE(SOLVER_EQUATIONS_TYPE), POINTER', 'SOLVER_EQUATIONS'], ['LOGICAL', 'SOLVER_MAPPING_FINISHED'], ['INTEGER(INTG)', 'NUMBER_OF_SOLVER_MATRICES'], ['INTEGER(INTG)', 'NUMBER_OF_ROWS'], ['INTEGER(INTG)', 'NUMBER_OF_GLOBAL_ROWS'], ['INTEGER(INTG)', 'NUMBER_OF_EQUATIONS_SETS'], ['TYPE(EQUATIONS_SET_PTR_TYPE), ALLOCATABLE', 'EQUATIONS_SETS(:)'], ['TYPE(EQUATIONS_SET_TO_SOLVER_MAP_TYPE), ALLOCATABLE', 'EQUATIONS_SET_TO_SOLVER_MAP(:)'], ['INTEGER(INTG)', 'NUMBER_OF_INTERFACE_CONDITIONS'], ['TYPE(INTERFACE_CONDITION_PTR_TYPE), ALLOCATABLE', 'INTERFACE_CONDITIONS(:)'], ['TYPE(INTERFACE_CONDITION_TO_SOLVER_MAP_TYPE), ALLOCATABLE', 'INTERFACE_CONDITION_TO_SOLVER_MAP(:)'], ['TYPE(SOLVER_MAPPING_VARIABLES_TYPE), ALLOCATABLE', 'VARIABLES_LIST(:)'], ['TYPE(SOLVER_COL_TO_EQUATIONS_MAPS_TYPE), ALLOCATABLE', 'SOLVER_COL_TO_EQUATIONS_COLS_MAP(:)'], ['TYPE(SOLVER_ROW_TO_EQUATIONS_MAPS_TYPE), ALLOCATABLE', 'SOLVER_ROW_TO_EQUATIONS_ROWS_MAP(:)'], ['TYPE(DOMAIN_MAPPING_TYPE), POINTER', 'ROW_DOFS_MAPPING'], ['TYPE(SOlVER_MAPPING_CREATE_VALUES_CACHE_TYPE), POINTER', 'CREATE_VALUES_CACHE']]
+                ELSE
+                  PRINT*, "      TYPE(SOLVER_MAPPING_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%SOLVER_EQUATIONS%SOLVER_MAPPING (NULL)"
+                ENDIF ! If (IsAssociated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType', 'FIELD_TYPE', 'SOLVER_EQUATIONS_TYPE', 'SOLVER_MAPPING_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%SOLVER_EQUATIONS%SOLVER_MATRICES)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(SOLVER_MATRICES_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%SOLVER_EQUATIONS%SOLVER_MATRICES " // &
+                    & "(associated): " 
+                
+! type [SOLVER_MATRICES_TYPE] has inner types [['TYPE(SOLVER_EQUATIONS_TYPE), POINTER', 'SOLVER_EQUATIONS'], ['LOGICAL', 'SOLVER_MATRICES_FINISHED'], ['TYPE(SOLVER_MAPPING_TYPE), POINTER', 'SOLVER_MAPPING'], ['INTEGER(INTG)', 'NUMBER_OF_ROWS'], ['INTEGER(INTG)', 'NUMBER_OF_GLOBAL_ROWS'], ['INTEGER(INTG)', 'LIBRARY_TYPE'], ['INTEGER(INTG)', 'NUMBER_OF_MATRICES'], ['TYPE(SOLVER_MATRIX_PTR_TYPE), ALLOCATABLE', 'MATRICES(:)'], ['LOGICAL', 'UPDATE_RESIDUAL'], ['TYPE(DISTRIBUTED_VECTOR_TYPE), POINTER', 'RESIDUAL'], ['LOGICAL', 'UPDATE_RHS_VECTOR'], ['TYPE(DISTRIBUTED_VECTOR_TYPE), POINTER', 'RHS_VECTOR']]
+                ELSE
+                  PRINT*, "      TYPE(SOLVER_MATRICES_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%SOLVER_EQUATIONS%SOLVER_MATRICES (NULL)"
+                ENDIF ! If (IsAssociated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType', 'FIELD_TYPE', 'SOLVER_EQUATIONS_TYPE', 'SOLVER_MAPPING_TYPE', 'SOLVER_MATRICES_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%SOLVER_EQUATIONS%BOUNDARY_CONDITIONS)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(BOUNDARY_CONDITIONS_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%SOLVER_EQUATIONS%BOUNDARY_CONDITIONS " // &
+                    & "(associated): " 
+                
+! type [BOUNDARY_CONDITIONS_TYPE] has inner types [['TYPE(SOLVER_EQUATIONS_TYPE), POINTER', 'SOLVER_EQUATIONS'], ['LOGICAL', 'BOUNDARY_CONDITIONS_FINISHED'], ['INTEGER(INTG)', 'NUMBER_OF_BOUNDARY_CONDITIONS_VARIABLES'], ['TYPE(BOUNDARY_CONDITIONS_VARIABLE_PTR_TYPE), ALLOCATABLE', 'BOUNDARY_CONDITIONS_VARIABLES(:)'], ['INTEGER(INTG)', 'neumannMatrixSparsity']]
+                ELSE
+                  PRINT*, "      TYPE(BOUNDARY_CONDITIONS_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%SOLVER_EQUATIONS%BOUNDARY_CONDITIONS (NULL)"
+                ENDIF ! If (IsAssociated)
+              ELSE
+                PRINT*, "     TYPE(SOLVER_EQUATIONS_TYPE), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%SOLVER_EQUATIONS (NULL)"
+              ENDIF ! If (IsAssociated)
+              ! depth 5
+              ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType', 'FIELD_TYPE', 'SOLVER_EQUATIONS_TYPE', 'SOLVER_MAPPING_TYPE', 'SOLVER_MATRICES_TYPE', 'BOUNDARY_CONDITIONS_TYPE']
+              ! case pointer
+              IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%CELLML_EQUATIONS)
+              IF (IsAssociated) THEN 
+                WRITE(*,'(A)') &
+                  & "      TYPE(CELLML_EQUATIONS_TYPE), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%CELLML_EQUATIONS " // &
+                  & "(associated): " 
+              
+! type [CELLML_EQUATIONS_TYPE] has inner types [['TYPE(SOLVER_TYPE), POINTER', 'SOLVER'], ['LOGICAL', 'CELLML_EQUATIONS_FINISHED'], ['INTEGER(INTG)', 'NUMBER_OF_CELLML_ENVIRONMENTS'], ['TYPE(CELLML_PTR_TYPE), ALLOCATABLE', 'CELLML_ENVIRONMENTS(:)']]
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType', 'FIELD_TYPE', 'SOLVER_EQUATIONS_TYPE', 'SOLVER_MAPPING_TYPE', 'SOLVER_MATRICES_TYPE', 'BOUNDARY_CONDITIONS_TYPE', 'CELLML_EQUATIONS_TYPE']
+                ! case pointer
+                IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%CELLML_EQUATIONS%SOLVER)
+                IF (IsAssociated) THEN 
+                  WRITE(*,'(A)') &
+                    & "       TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%CELLML_EQUATIONS%SOLVER " // &
+                    & "(associated): " 
+                  PRINT*, "Type already exists and may be a loop!"
+                ELSE
+                  PRINT*, "      TYPE(SOLVER_TYPE), POINTER :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%CELLML_EQUATIONS%SOLVER (NULL)"
+                ENDIF ! If (IsAssociated)
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType', 'FIELD_TYPE', 'SOLVER_EQUATIONS_TYPE', 'SOLVER_MAPPING_TYPE', 'SOLVER_MATRICES_TYPE', 'BOUNDARY_CONDITIONS_TYPE', 'CELLML_EQUATIONS_TYPE']
+                PRINT*, "      LOGICAL :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%CELLML_EQUATIONS%CELLML_EQUATIONS_FINISHED: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%CELLML_EQUATIONS%CELLML_EQUATIONS_FINISHED
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType', 'FIELD_TYPE', 'SOLVER_EQUATIONS_TYPE', 'SOLVER_MAPPING_TYPE', 'SOLVER_MATRICES_TYPE', 'BOUNDARY_CONDITIONS_TYPE', 'CELLML_EQUATIONS_TYPE']
+                PRINT*, "      INTEGER(INTG) :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%CELLML_EQUATIONS%NUMBER_OF_CELLML_ENVIRONMENTS: ", &
+                  & Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%CELLML_EQUATIONS%NUMBER_OF_CELLML_ENVIRONMENTS
+                ! depth 6
+                ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType', 'FIELD_TYPE', 'SOLVER_EQUATIONS_TYPE', 'SOLVER_MAPPING_TYPE', 'SOLVER_MATRICES_TYPE', 'BOUNDARY_CONDITIONS_TYPE', 'CELLML_EQUATIONS_TYPE']
+                ! case allocatable
+                IsAllocated = ALLOCATED(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%CELLML_EQUATIONS%CELLML_ENVIRONMENTS)
+                IF (IsAllocated) THEN 
+                  Dimension = SIZE(SHAPE(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%CELLML_EQUATIONS%CELLML_ENVIRONMENTS),1)
+                  WRITE(*,'(A,I2,A)',advance='no') &
+                    & "       TYPE(CELLML_PTR_TYPE), ALLOCATABLE :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%CELLML_EQUATIONS%CELLML_ENVIRONMENTS(:) " // &
+                    & "(allocated, dim=", Dimension, ", size="
+
+                  ! loop over dimensions
+                  DO I = 1,Dimension
+                    WRITE(*,'(I5)',advance='no') &
+                      & SIZE(Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%CELLML_EQUATIONS%CELLML_ENVIRONMENTS, I)
+                    IF (I /= Dimension) WRITE(*,'(A)',advance='no') " x "
+                  ENDDO
+                  WRITE(*,'(A)',advance='no') "): " // NEW_LINE('A')
+                ELSE
+                  PRINT*, "      TYPE(CELLML_PTR_TYPE), ALLOCATABLE :: " // &
+                    & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS(I2)%PTR%CELLML_EQUATIONS%CELLML_ENVIRONMENTS(:) (not allocated)"
+                ENDIF ! IF (IsAllocated)
+              ELSE
+                PRINT*, "     TYPE(CELLML_EQUATIONS_TYPE), POINTER :: " // &
+                  & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR%CELLML_EQUATIONS (NULL)"
+              ENDIF ! If (IsAssociated)
+            ELSE
+              PRINT*, "    TYPE(SOLVER_TYPE), POINTER :: " // &
+                & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS("//I2_STR//")%PTR (NULL)"
+            ENDIF ! If (IsAssociated)
+          ENDDO  ! I2
+        ELSE
+          PRINT*, "   TYPE(SOLVER_PTR_TYPE), ALLOCATABLE :: " // &
+            & "Problem%CONTROL_LOOP%SOLVERS%SOLVERS(:) (not allocated)"
+        ENDIF ! IF (IsAllocated)
+      ELSE
+        PRINT*, "  TYPE(SOLVERS_TYPE), POINTER :: " // &
+          & "Problem%CONTROL_LOOP%SOLVERS (NULL)"
+      ENDIF ! If (IsAssociated)
+      ! depth 2
+      ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType', 'FIELD_TYPE', 'SOLVER_EQUATIONS_TYPE', 'SOLVER_MAPPING_TYPE', 'SOLVER_MATRICES_TYPE', 'BOUNDARY_CONDITIONS_TYPE', 'CELLML_EQUATIONS_TYPE']
+      ! case pointer
+      IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%HISTORY)
+      IF (IsAssociated) THEN 
+        WRITE(*,'(A)') &
+          & "   TYPE(HISTORY_TYPE), POINTER :: " // &
+          & "Problem%CONTROL_LOOP%HISTORY " // &
+          & "(associated): " 
+      
+! type [HISTORY_TYPE] has inner types [['TYPE(CONTROL_LOOP_TYPE), POINTER', 'CONTROL_LOOP'], ['LOGICAL', 'HISTORY_FINISHED'], ['INTEGER(INTG)', 'FILE_FORMAT'], ['TYPE(VARYING_STRING)', 'FILENAME'], ['INTEGER(INTG)', 'UNIT_NUMBER'], ['TYPE(FIELD_TYPE), POINTER', 'FIELD']]
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType', 'FIELD_TYPE', 'SOLVER_EQUATIONS_TYPE', 'SOLVER_MAPPING_TYPE', 'SOLVER_MATRICES_TYPE', 'BOUNDARY_CONDITIONS_TYPE', 'CELLML_EQUATIONS_TYPE', 'HISTORY_TYPE']
+        ! case pointer
+        IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%HISTORY%CONTROL_LOOP)
+        IF (IsAssociated) THEN 
+          WRITE(*,'(A)') &
+            & "    TYPE(CONTROL_LOOP_TYPE), POINTER :: " // &
+            & "Problem%CONTROL_LOOP%HISTORY%CONTROL_LOOP " // &
+            & "(associated): " 
+          PRINT*, "Type already exists and may be a loop!"
+        ELSE
+          PRINT*, "   TYPE(CONTROL_LOOP_TYPE), POINTER :: " // &
+            & "Problem%CONTROL_LOOP%HISTORY%CONTROL_LOOP (NULL)"
+        ENDIF ! If (IsAssociated)
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType', 'FIELD_TYPE', 'SOLVER_EQUATIONS_TYPE', 'SOLVER_MAPPING_TYPE', 'SOLVER_MATRICES_TYPE', 'BOUNDARY_CONDITIONS_TYPE', 'CELLML_EQUATIONS_TYPE', 'HISTORY_TYPE']
+        PRINT*, "   LOGICAL :: " // &
+          & "Problem%CONTROL_LOOP%HISTORY%HISTORY_FINISHED: ", &
+          & Problem%CONTROL_LOOP%HISTORY%HISTORY_FINISHED
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType', 'FIELD_TYPE', 'SOLVER_EQUATIONS_TYPE', 'SOLVER_MAPPING_TYPE', 'SOLVER_MATRICES_TYPE', 'BOUNDARY_CONDITIONS_TYPE', 'CELLML_EQUATIONS_TYPE', 'HISTORY_TYPE']
+        PRINT*, "   INTEGER(INTG) :: " // &
+          & "Problem%CONTROL_LOOP%HISTORY%FILE_FORMAT: ", &
+          & Problem%CONTROL_LOOP%HISTORY%FILE_FORMAT
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType', 'FIELD_TYPE', 'SOLVER_EQUATIONS_TYPE', 'SOLVER_MAPPING_TYPE', 'SOLVER_MATRICES_TYPE', 'BOUNDARY_CONDITIONS_TYPE', 'CELLML_EQUATIONS_TYPE', 'HISTORY_TYPE']
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType', 'FIELD_TYPE', 'SOLVER_EQUATIONS_TYPE', 'SOLVER_MAPPING_TYPE', 'SOLVER_MATRICES_TYPE', 'BOUNDARY_CONDITIONS_TYPE', 'CELLML_EQUATIONS_TYPE', 'HISTORY_TYPE']
+        PRINT*, "   INTEGER(INTG) :: " // &
+          & "Problem%CONTROL_LOOP%HISTORY%UNIT_NUMBER: ", &
+          & Problem%CONTROL_LOOP%HISTORY%UNIT_NUMBER
+        ! depth 3
+        ! types_stack: ['PROBLEM_TYPE', 'PROBLEMS_TYPE', 'PROBLEM_PTR_TYPE', 'CONTROL_LOOP_TYPE', 'CONTROL_LOOP_SIMPLE_TYPE', 'CONTROL_LOOP_FIXED_TYPE', 'CONTROL_LOOP_TIME_TYPE', 'CONTROL_LOOP_WHILE_TYPE', 'CONTROL_LOOP_LOAD_INCREMENT_TYPE', 'CONTROL_LOOP_PTR_TYPE', 'SOLVERS_TYPE', 'SOLVER_PTR_TYPE', 'SOLVER_TYPE', 'LINEAR_SOLVER_TYPE', 'LINEAR_DIRECT_SOLVER_TYPE', 'LINEAR_ITERATIVE_SOLVER_TYPE', 'NONLINEAR_SOLVER_TYPE', 'NEWTON_SOLVER_TYPE', 'QUASI_NEWTON_SOLVER_TYPE', 'DYNAMIC_SOLVER_TYPE', 'DAE_SOLVER_TYPE', 'EULER_DAE_SOLVER_TYPE', 'CRANK_NICOLSON_DAE_SOLVER_TYPE', 'RUNGE_KUTTA_DAE_SOLVER_TYPE', 'ADAMS_MOULTON_DAE_SOLVER_TYPE', 'BDF_DAE_SOLVER_TYPE', 'RUSH_LARSON_DAE_SOLVER_TYPE', 'EXTERNAL_DAE_SOLVER_TYPE', 'EIGENPROBLEM_SOLVER_TYPE', 'OPTIMISER_SOLVER_TYPE', 'CELLML_EVALUATOR_SOLVER_TYPE', 'CELLML_TYPE', 'GeometricTransformationSolverType', 'FIELD_TYPE', 'SOLVER_EQUATIONS_TYPE', 'SOLVER_MAPPING_TYPE', 'SOLVER_MATRICES_TYPE', 'BOUNDARY_CONDITIONS_TYPE', 'CELLML_EQUATIONS_TYPE', 'HISTORY_TYPE']
+        ! case pointer
+        IsAssociated = ASSOCIATED(Problem%CONTROL_LOOP%HISTORY%FIELD)
+        IF (IsAssociated) THEN 
+          WRITE(*,'(A)') &
+            & "    TYPE(FIELD_TYPE), POINTER :: " // &
+            & "Problem%CONTROL_LOOP%HISTORY%FIELD " // &
+            & "(associated): " 
+          PRINT*, "Type already exists and may be a loop!"
+        ELSE
+          PRINT*, "   TYPE(FIELD_TYPE), POINTER :: " // &
+            & "Problem%CONTROL_LOOP%HISTORY%FIELD (NULL)"
+        ENDIF ! If (IsAssociated)
+      ELSE
+        PRINT*, "  TYPE(HISTORY_TYPE), POINTER :: " // &
+          & "Problem%CONTROL_LOOP%HISTORY (NULL)"
+      ENDIF ! If (IsAssociated)
+    ELSE
+      PRINT*, " TYPE(CONTROL_LOOP_TYPE), POINTER :: " // &
+        & "Problem%CONTROL_LOOP (NULL)"
+    ENDIF ! If (IsAssociated)
+  ELSE
+    PRINT*, "TYPE(PROBLEM_TYPE), POINTER :: " // &
+      & "Problem (NULL)"
+  ENDIF ! If (IsAssociated)
+
+END SUBROUTINE Print_Problem_type
+
 !  TYPE EQUATIONS_TYPE
 !    TYPE(EQUATIONS_SET_TYPE), POINTER :: EQUATIONS_SET !<A pointer to the equations_set
 !    LOGICAL :: EQUATIONS_FINISHED !<Is .TRUE. if the equations have finished being created, .FALSE. if not.
