@@ -26,12 +26,15 @@ MODULE Custom_Profiling
   CHARACTER(LEN=IDENTIFIER_LENGTH), DIMENSION(NUMBER_OF_RECORDS) :: MemoryIdentifiers      !< identifier for memory records
   REAL(DP), DIMENSION(NUMBER_OF_RECORDS) :: Durations
   REAL(DP), DIMENSION(NUMBER_OF_RECORDS) :: StartTime
-  INTEGER(LINTG), DIMENSION(NUMBER_OF_RECORDS) :: MemoryConsumptions
-  INTEGER(INTG), DIMENSION(NUMBER_OF_RECORDS) :: SizesPerElement
-  INTEGER(INTG), DIMENSION(NUMBER_OF_RECORDS) :: NumberOfObjects
-  INTEGER(INTG), DIMENSION(NUMBER_OF_RECORDS) :: TimeCount
+  INTEGER(LINTG), DIMENSION(NUMBER_OF_RECORDS) :: MemoryConsumptions   !< Memory Consumption at call to CustomProfilingMemory
+  INTEGER(INTG), DIMENSION(NUMBER_OF_RECORDS) :: SizesPerElement       !< size of an element at call to CustomProfilingMemory
+  INTEGER(INTG), DIMENSION(NUMBER_OF_RECORDS) :: NumberOfObjects       !< number of objects
+  INTEGER(INTG), DIMENSION(NUMBER_OF_RECORDS) :: TimeCount             !< how often a CustomProfilingStart was called for each identifier
+  INTEGER(LINTG), DIMENSION(NUMBER_OF_RECORDS) :: StartMemory     !<   memory (resident set size) at call to last CustomProfilingStart, in multiples of pagesize (=2048)
+  INTEGER(LINTG), DIMENSION(NUMBER_OF_RECORDS) :: TotalMemory     !<   total new memory consumption (RSS) between call to CustomProfilingStart and CustomProfilingEnd, in multiples of pagesize (=2048)
   INTEGER :: SizeDuration = 0
   INTEGER :: SizeMemory = 0
+  INTEGER(LINTG) :: CurrentMemoryConsumption
 
 CONTAINS
 
@@ -55,6 +58,8 @@ CONTAINS
       DurationIdentifiers(CurrentIndex) = Identifier
       Durations(CurrentIndex) = 0.0_8
       TimeCount(CurrentIndex) = 0
+      StartMemory(CurrentIndex) = GetCurrentMemoryConsumption()
+      TotalMemory(CurrentIndex) = 0
     ENDIF
 
     CALL CPU_TIME(StartTime(CurrentIndex))
@@ -83,6 +88,10 @@ CONTAINS
     Duration = EndTime - StartTime(CurrentIndex)
     Durations(CurrentIndex) = Durations(CurrentIndex) + Duration
     TimeCount(CurrentIndex) = TimeCount(CurrentIndex) + 1
+
+    CurrentMemoryConsumption = GetCurrentMemoryConsumption()
+    TotalMemory(CurrentIndex) = TotalMemory(CurrentIndex) + (CurrentMemoryConsumption - StartMemory(CurrentIndex))
+    StartMemory(CurrentIndex) = CurrentMemoryConsumption
   END SUBROUTINE
 
   !
@@ -165,6 +174,31 @@ CONTAINS
   !
   !================================================================================================================================
   !
+  FUNCTION GetCurrentMemoryConsumption()
+    INTEGER(LIntg) :: GetCurrentMemoryConsumption
+    INTEGER(LIntg) :: VmSize, VmRSS, Shared, Text, Lib, Data, Dt, RssAnon
+    INTEGER(Intg) :: Stat
+
+    ! read from /proc/self/statm
+    OPEN(UNIT=10, FILE="/proc/self/statm", ACTION="read", IOSTAT=stat)
+    IF (STAT /= 0) THEN
+      PRINT*, "Could not read memory consumption from /proc/self/statm."
+      GetCurrentMemoryConsumption = 0
+    ELSE
+      READ(10,*, IOSTAT=stat) VmSize, VmRSS, Shared, Text, Lib, Data, Dt
+      CLOSE(UNIT=10)
+
+      ! VmRSS = RssAnon + Shared (all as number of pages)
+      ! RssAnon is the resident set size of anonymous memory (real memory in RAM, not laid out in files)
+      RssAnon = VmRSS - Shared
+      GetCurrentMemoryConsumption = RssAnon
+    ENDIF
+
+  END FUNCTION GetCurrentMemoryConsumption
+
+  !
+  !================================================================================================================================
+  !
   FUNCTION CustomProfilingGetInfo()
     CHARACTER(LEN=200000) :: CustomProfilingGetInfo
     CHARACTER(LEN=10000) :: Line
@@ -176,12 +210,19 @@ CONTAINS
     CustomProfilingGetInfo = TRIM(CustomProfilingGetInfo) // "Timing" // NEW_LINE('A')
     DO I = 1,SizeDuration
       WRITE(Line,"(3A,F25.13,A,I10,2A)") "   ", (DurationIdentifiers(I)), ": ", Durations(I), ' s', &
-	& TimeCount(I), 'x', NEW_LINE('A')
+        & TimeCount(I), 'x', NEW_LINE('A')
+      CustomProfilingGetInfo = TRIM(CustomProfilingGetInfo) // TRIM(Line)
+    ENDDO
+
+    CustomProfilingGetInfo = TRIM(CustomProfilingGetInfo) // "Memory Consumption while Timing" // NEW_LINE('A')
+    DO I = 1,SizeDuration
+      WRITE(Line,"(3A,I17,A,I17,2A)") "   ", (DurationIdentifiers(I)), ": ", TotalMemory(I), ' B, avg.', &
+        & TotalMemory(I)/TimeCount(I), ' B per profiling interval, ', NEW_LINE('A')
       CustomProfilingGetInfo = TRIM(CustomProfilingGetInfo) // TRIM(Line)
     ENDDO
 
     ! Collect memory consumption
-    CustomProfilingGetInfo = TRIM(CustomProfilingGetInfo) // "Memory Consumption" // NEW_LINE('A')
+    CustomProfilingGetInfo = TRIM(CustomProfilingGetInfo) // "Static Memory Consumption" // NEW_LINE('A')
     TotalNumberOfObjects = 0
     TotalMemoryConsumption = 0
     DO I = 1,SizeMemory
